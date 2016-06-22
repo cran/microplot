@@ -1,0 +1,68 @@
+%% commands from jss.cls
+%\makeatletter
+\newcommand\code{\bgroup\@makeother\_\@makeother\~\@makeother\$\@codex}
+\def\@codex#1{{\normalfont\ttfamily\hyphenchar\font=-1 #1}\egroup}
+%\makeatother
+\let\proglang=\textsf
+\newcommand{\pkg}[1]{{\fontseries{b}\selectfont #1}}
+
+\renewcommand{\S}{\proglang{S}}
+\newcommand{\Splus}{\proglang{S-Plus}}
+\newcommand{\Splussign}{\proglang{S+}}
+\newcommand{\R}{\proglang{R}}
+\newcommand{\SAS}{\proglang{SAS}}
+\newcommand{\Excel}{\proglang{Excel}}
+\newcommand{\RExcel}{\proglang{RExcel}}
+\newcommand{\Rcmdr}{\pkg{Rcmdr}}
+\newcommand{\shiny}{\pkg{shiny}}
+\newcommand{\Windows}{\proglang{Windows}}
+\newcommand{\HH}{\pkg{HH}}
+
+\renewcommand{\th}{{\mbox{\scriptsize th}}}
+\newcommand{\hlinefill}{\mbox{\rule{0pt}{1ex}}\hrulefill}
+\newcommand{\marpar}[1]{\marginpar{\raggedright#1}}
+\newcommand{\z}{\phantom{0}}
+\newcommand{\corr}{\mathop{\mbox{corr}}}
+\newcommand{\crit}{{\mbox{\scriptsize crit}}}
+
+
+
+\let\Scode=\comment        %% in verbatim
+\let\endScode=\endcomment  %% in verbatim
+%% When I run each individual file through HH2writing::Stangle.HH,
+%% Scode will have it's Sweave meaning and the R code will
+%% be pulled into an executable file.
+%% The code from tex file abcd.tex will be collected into R file code/abcd.R
+\let\Sanswer=\comment        %% in verbatim
+\let\endSanswer=\endcomment  %% in verbatim
+%% Similarly, when I run each individual file through HH2writing::Stangle.HHanswer,
+%% the answer sections of R code will be collected in an R file answer/abcd.R
+
+
+\raggedbottom
+\paperheight 6.75in     %% these three lines get the papersize right,  8   x  6
+\paperwidth  9in     %% but don't use the \textwidth,               8   x  6
+\pdfpagewidth\paperwidth\pdfpageheight\paperheight%
+\textheight 5.5in
+\textwidth 8in
+\oddsidemargin  -.50in
+\evensidemargin -.50in
+\topmargin -.8in
+\parskip 2.5ex
+\parindent 0in
+
+\Large
+\pagestyle{myheadings}
+
+\newcommand{\dfigref}[1]{figure/#1}  %%revised
+
+
+%% The TeXbook page 429, cmtt10 layout (\tt)
+%%
+\newcommand{\LB}{{\tt\char'173}}        % \tt {
+\newcommand{\RB}{{\tt\char'175}}        % \tt }
+\newcommand{\BS}{{\tt\char'134}}        % \tt \
+\newcommand{\US}{{\tt\char'137}}        % \tt _
+\newcommand{\tttilde}{{\tt\char'176}}        % \tt ~
+\newcommand{\ttcirconflex}{{\tt\char'136}}        % \tt ^
+\newcommand{\pct}{{\tt\char'045}}        % \tt %

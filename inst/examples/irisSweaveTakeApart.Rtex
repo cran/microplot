@@ -1,0 +1,98 @@
+\documentclass{article}
+
+\usepackage{graphicx}        % standard LaTeX graphics tool when including figure files
+
+\newcommand{\code}[1]{{\tt #1}}
+
+\oddsidemargin  0in
+\evensidemargin 0in
+\textwidth  6.5in
+
+\begin{document}
+\setkeys{Gin}{width=.3\textwidth}
+
+This is an example of an \code{Sweave} \LaTeX-style file.  Run the
+\code{irisSweaveTakeApart.Rtex} file through \code{Sweave} to create file
+\code{irisSweaveTakeApart.pdf}.  The distributed version of the \code{pdf} file
+is called\\
+ \code{irisSweaveTakeApart-distributed.pdf}.
+
+In this example, the individual panels in the pdf file containing the
+image of the bwplot were isolated with the \code{trim} argument to the \code{as.includegraphics}
+function.  The panels were then placed into the \LaTeX\ table.
+
+The file was run by
+\begin{verbatim}
+Sweave("irisSweaveTakeApart.Rtex")
+tools::texi2pdf("irisSweaveTakeApart.tex")
+system("open irisSweaveTakeApart.pdf")
+\end{verbatim}
+
+\begin{Scode}{echo=FALSE}
+library(microplot)
+library(lattice)
+
+iris.melt <- reshape2::melt(iris, id="Species")
+irisBW <- bwplot( ~ value | Species * variable, data=iris.melt, as.table=TRUE)
+
+pdf("irisBW.pdf")
+irisBW
+suppress <- dev.off()
+
+## Examine the file irisBW.pdf with a viewer that gives access to the pixel information.
+## I am using the Macintosh Preview application with the "Tools > Show Inspector" menu item.
+## Decide on the positions of the subsets of each panel you want and write the loop accordingly.
+## Pay attention to the sequence of panels.  In this example I am using the option as.table=TRUE,
+## so the panels are numbered
+##    1  2  3
+##    4  5  6
+##    7  8  9
+##   10 11 12
+## make necessary adjustment to keep or not keep the panel borders
+
+## left bottom right top
+## panel 1, row 1, column 1, top left
+trim1 <- c(31, 504 - (92+32), 504-(31+152.05)+16, 92)
+panel.height <- 102.9
+panel.width <- 152.43
+##
+nrows <- 4
+ncols <- 3
+
+trim0 <- trim1
+trim0[c(1,3)] <- trim1[c(1,3)] + c(-1, 1) * panel.width
+trim0[c(2,4)] <- trim1[c(2,4)] + c(1, -1) * panel.height
+trim <- matrix("", nrows, ncols, dimnames=rev(dimnames(irisBW)))
+##
+for (rr in 1:nrows)
+   for (cc in 1:ncols)
+    {
+      trimij <- trim0
+      trimij[c(1,3)] <- trim0[c(1,3)] - cc * c(-1, 1) * panel.width
+      trimij[c(2,4)] <- trim0[c(2,4)] + rr * c(-1, 1) * panel.height
+      trim[rr, cc] <- paste(trimij, collapse=" ")
+    }
+
+
+graphicsnames <- trim
+for (rr in 1:nrows)
+   for (cc in 1:ncols)
+      graphicsnames[rr, cc] <-
+         as.includegraphics("irisBW.pdf", trim=trim[rr, cc], height=".75em", raise="-.2ex")
+
+BWTakeApart.latex <- Hmisc::latex(graphicsnames, title="BWTakeApart", where = "!htbp")
+BWTakeApart.latex$style <- "graphicx"
+## print.default(BWTakeApart.latex)
+
+BWTakeApart.latex  ## this line requires latex in the path
+## the BWTakeApart.latex line is not needed when the file is used in a \verb:\input: statement.
+
+\end{Scode}
+
+\setkeys{Gin}{width=.4\textwidth}
+\includegraphics{irisBW.pdf}
+
+\setkeys{Gin}{width=3.75em}
+\input{BWtakeApart.tex}
+
+\end{document}

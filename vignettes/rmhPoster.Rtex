@@ -1,0 +1,393 @@
+%% -*- mode: latex -*-
+%% more Emacs definitions at end of file
+
+%\VignetteIndexEntry{Microplots in LaTeX tables, useR2016 poster}
+%\VignetteKeywords{microplot, sparkline}
+
+\documentclass[12pt]{article}
+\usepackage{graphicx}        % standard LaTeX graphics tool when including figure files
+\usepackage{verbatim}
+\usepackage{rmhslides}
+\usepackage{url}
+
+\begin{document}
+
+\begin{Scode}{echo=FALSE}
+library(lattice)
+library(latticeExtra)
+library(microplot)
+
+## options needed by Hmisc::latex
+options(latexcmd='pdflatex')
+options(dviExtension='pdf')
+options(xdvicmd='open') ## Macintosh, Windows, SMP linux
+## Hmisc::latex
+
+
+## boxplot matrix of iris data
+irisBW <-
+  bwplot( ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width | Species,
+         data=iris, outer=TRUE, as.table=TRUE,
+         scales=list(alternating=FALSE),
+         xlab=NULL,
+         par.strip.text=list(cex=1.5))
+
+## pdf of boxplot matrix
+pdf("irisBW.pdf", width=7, height=7)  ## inch
+useOuterStrips(irisBW)
+suppress <- dev.off()
+
+
+## twelve individual boxplots without axes
+irisBW.update <-
+update(irisBW,
+       xlab=NULL,
+       par.settings=list(
+         layout.heights=layoutHeightsCollapse(),
+         layout.widths=layoutWidthsCollapse(),
+         axis.line=list(col="transparent")),
+       layout=c(1,1)
+       )
+
+## horizontal axis
+irisBW.axis <-
+update(irisBW.update[1,1],
+       scales=list(cex=.6),
+       par.settings=list(layout.heights=list(axis.bottom=1, panel=0),
+                         axis.line=list(col="black")))
+
+
+## create 13 pdf files, one per boxplot and one more for the horizontal axis
+pdf("irisBW%03d.pdf", onefile=FALSE, height=.4, width=1.6)  ## inch
+irisBW.update  ## 12 individual boxplots without axes
+suppress <- dev.off()
+
+pdf("irisBW013.pdf", height=.4, width=1.6)  ## inch
+irisBW.axis    ## horizontal axis
+suppress <- dev.off()
+
+## construct names of pdf files
+graphnames <- paste0("irisBW", sprintf("%03i", 1:13), ".pdf")
+
+## matrix of latex \includegraphics{} macros for each boxplot's pdf file
+graphicsnames <- t(matrix(as.includegraphics(graphnames[1:12], height="2em", raise="-1.3ex"),
+                          nrow=3, ncol=4,
+                          dimnames=dimnames(irisBW)))
+
+
+
+
+## Measurement by Species
+BWMS.latex <- Hmisc::latex(graphicsnames, caption="\\Large Measurement by Species", where="!htbp",
+                           label="BWMS", title="Measurement", file="BWMS.tex",
+                           size="Large")
+BWMS.latex$style <- "graphicx"
+## BWMS.latex
+## Hmisc::dvi(BWMS.latex, width=7, height=3)
+
+
+
+## Measurement by Species with Axis
+graphicsnamesA <- rbind(graphicsnames, as.includegraphics(graphnames[13], height="2em", raise="-1.3ex"))
+BWMSA.latex <- Hmisc::latex(graphicsnamesA, caption="\\Large Measurement by Species, with $x$-scale",
+                            where="!htbp",
+                            n.rgroup=c(4, 1),
+                            rgroup=c("\\vspace*{-1em}", "\\vspace*{-1.25em}"),
+                            label="BWMSA", title="Measurement", file="BWMSA.tex",
+                            size="Large")
+BWMSA.latex$style <- "graphicx"
+## BWMSA.latex
+## Hmisc::dvi(BWMSA.latex, width=7, height=3)
+
+## Species by Measurement
+BWSM.latex <- Hmisc::latex(t(graphicsnames), caption="\\Large Species by Measurement", where="!htbp",
+              label="BWSM", title="Species", file="BWSM.tex", size="large")
+BWSM.latex$style <- "graphicx"
+## BWSM.latex
+## Hmisc::dvi(BWSM.latex, width=7.5, height=2)
+
+
+
+## Individual boxes embedded into a more interesting table
+iris.fivenum <-
+sapply(levels(iris$Species),
+       function(i) {
+         tmp <- sapply(iris[iris$Species==i, 1:4], fivenum)
+         dimnames(tmp)[[1]] <- c("min", "Q1", "med", "Q3", "max")
+         tmp
+       },
+       simplify=FALSE)
+
+## Species and Measurement in separate columns
+BW5num <-
+rbind(
+data.frame(t(iris.fivenum[[1]]), "Box Plots"=graphicsnames[,1], check.names=FALSE),
+data.frame(t(iris.fivenum[[2]]), "Box Plots"=graphicsnames[,2], check.names=FALSE),
+data.frame(t(iris.fivenum[[3]]), "Box Plots"=graphicsnames[,3], check.names=FALSE))
+BW5num$Measurement=names(iris)[1:4]
+BW5num <- BW5num[, c(7,1:6)]
+
+BW5num.latex <-
+   Hmisc::latex(BW5num,
+                 rowname=" ",
+                 rowlabel="Species",
+                 rgroup=levels(iris$Species),
+                 n.rgroup=c(4,4,4),
+                 cgroup=c("", "Five Number Summary", ""),
+                 n.cgroup=c(1, 5, 1),
+                 caption="\\Large Five Number Summary and Boxplots for each Species and Measurement",
+                 label="irisBW5num",
+                 where="!htbp")
+BW5num.latex$style <- "graphicx"
+## BW5num.latex  ## this line requires latex in the path
+## print.default(BW5num.latex)  ## the content of the R variable is the filename of
+                                ## the file containing the latex table environment
+\end{Scode}
+
+%% \setkeys{Gin}{width=.3\textwidth}
+
+\markright{Microplots in Tables  \hfil
+           Richard M. Heiberger \hfil useR! 2016 ~ June 28, 2016}
+\Large
+
+\begin{center}
+\Huge
+\proglang{R} Microplots in Tables with the \code{latex()} Function\\[1ex]
+\LARGE
+Richard M. Heiberger, \Large \url{rmh@temple.edu} \\
+\url{http://astro.ocis.temple.edu/~rmh/}\\
+\large
+Statistical Science, Fox School, Temple University\\
+\end{center}
+
+{
+\Large
+
+  Microplots (sparklines) are often used within cells of a tabular array.
+
+  We describe several \proglang{R} functions that simplify the use of microplots\\
+   \hspace*{2em} within \LaTeX\ tables constructed in \proglang{R} with \code{Hmisc::latex} or a similar function.
+   \hspace*{2em} within \proglang{HTML} tables constructed with the \pkg{htmlTable} package.
+
+  We show examples using \pkg{base} graphics, \pkg{lattice} graphics,
+  and \pkg{ggplot2} graphics.
+
+  These functions work in \LaTeX\ documents constructed \\
+  \hspace*{2em}directly in \LaTeX, \\
+  \hspace*{2em}with the \proglang{R} packages \pkg{Sweave}, \pkg{knitr}, or \pkg{rmarkdown}, \\
+  \hspace*{2em}and with the \proglang{Emacs} package \pkg{org-mode}.
+
+ }
+
+%% \section[latex table with microplots in some of the cells]{\LaTeX\ table with microplots in some of the cells}
+
+
+
+\clearpage
+\section{Boxplots of \code{iris} data with \code{lattice} and \code{latticeExtra}}
+\begin{figure}[h]
+\vspace*{-.6in}
+\begin{center}
+\includegraphics[width=.6\textwidth]{irisBW.pdf}
+\vspace*{-.3in}
+\caption[useOuterStrips]{\label{irisBW}
+  \Large \code{useOuterStrips(\\
+    bwplot(\tttilde\ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width\\
+    | Species, data=iris, outer=TRUE, as.table=TRUE))}}
+\end{center}
+\vspace*{-1in}
+\end{figure}
+\clearpage
+
+
+\clearpage
+\section{Individual boxes placed into a \LaTeX\  \code{tabular} environment}
+\setkeys{Gin}{width=8em}
+\input{BWMS.tex}
+
+\clearpage
+\section{Individual boxes in a table with the $x$-scale displayed}
+\setkeys{Gin}{width=8em}
+\input{BWMSA.tex}
+
+\clearpage
+\section{Transposed \LaTeX\ table}
+\setkeys{Gin}{width=8em}
+\input{BWSM.tex}
+
+\clearpage
+{
+\setlength{\textheight}{4in}
+\section{Individual boxes embedded into a more interesting table}
+\vspace*{-.5in}
+\setkeys{Gin}{width=8em}
+\input{BW5num.tex}
+}
+
+
+\section{How does it work?}
+
+There are two tasks.  The \pkg{microplot} package provides functions for each task.
+
+1. Isolate the contents of each panel of a multipanel graph into its own \code{pdf} file.
+
+\pkg{lattice}: functions \code{layoutHeightsCollapse} and \code{layoutWidthsCollapse}\\
+   \hspace*{3.65em}and argument \code{layout=c(1,1)}\\
+\pkg{ggplot2}: function \code{theme_collapse} and loop through panels\\
+\pkg{base}: adjust \code{par} arguments and \code{xlim} and \code{ylim}
+
+
+2. Automate construction of the graphics statements.
+
+\proglang{\LaTeX}: \code{as.includegraphics} function\\
+\proglang{HTML}: \code{as.htmlimg} function\\
+\pkg{org-mode}: \code{as.orgtable} and \code{as.orgfile} functions
+
+\newpage
+\section{\Large \pkg{lattice}}
+
+\begin{verbatim}
+## boxplot matrix of iris data
+irisBW <-
+  bwplot(~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width |
+           Species,
+         data=iris, outer=TRUE, as.table=TRUE,
+         scales=list(alternating=FALSE),
+         xlab=NULL,
+         par.strip.text=list(cex=1.5))
+
+## pdf of boxplot matrix
+pdf("irisBW.pdf")
+useOuterStrips(irisBW)
+suppress <- dev.off()
+\end{verbatim}
+
+\vspace*{-2.6in}\hspace*{5in}
+\includegraphics[width=.4\textwidth]{irisBW.pdf}
+
+
+
+\newpage
+\begin{verbatim}
+## twelve individual boxplots without axes
+irisBW.update <-
+update(irisBW,
+       xlab=NULL,
+       par.settings=list(
+         layout.heights=layoutHeightsCollapse(),
+         layout.widths=layoutWidthsCollapse(),
+         axis.line=list(col="transparent")),
+       layout=c(1,1)
+       )
+
+## create 12 pdf files, one per boxplot
+pdf("irisBW%03d.pdf", onefile=FALSE, height=.4, width=1.6)  ## inch
+irisBW.update
+suppress <- dev.off()
+\end{verbatim}
+
+\vspace*{-1.2in}\hspace*{1.3in}
+\includegraphics[width=\textwidth]{irisBW001.pdf}
+
+\vspace*{-1in}
+The first panel in file \code{irisBW001.pdf} is shown here.
+
+
+\newpage
+The functions \code{layoutHeightsCollapse} (shown here) and
+\code{layoutWidthsCollapse} set the vertical and horizontal
+space for everything in a plot, except the panel itself, to 0.
+
+\begin{verbatim}
+> layoutHeightsCollapse
+function (...)
+{
+    x.settings <- lattice::trellis.par.get()$layout.heights
+    x.settings[] <- 0
+    x.settings$panel = 1
+    inputs <- list(...)
+    if (length(inputs))
+        x.settings[names(inputs)] <- inputs
+    x.settings
+}
+\end{verbatim}
+
+\newpage
+The function \code{as.includegraphics} wraps the graph file names into
+the format used by the \LaTeX\ \pkg{graphicx} package.
+
+\begin{verbatim}
+> graphnames[1:2]
+[1] "irisBW001.pdf" "irisBW002.pdf"
+> graphicsnames <- as.includegraphics(graphnames[1:12], wd=".")
+> dim(graphicsnames) <- c(4,3)
+> graphicsnames[1:2, 1]
+[1] "\\includegraphics[height=1em]{./irisBW001.pdf}"
+[2] "\\includegraphics[height=1em]{./irisBW002.pdf}"
+\end{verbatim}
+
+These values are placed into an ordinary matrix or dataframe
+and sent to the \code{Hmisc::latex}
+function to create a latex file fragment that can be input with the \LaTeX\ \code{\BS input} macro.
+
+\begin{verbatim}
+BWMS.latex <- Hmisc::latex(graphicsnames)
+BWMS.latex$style <- "graphicx"
+\end{verbatim}
+
+
+\newpage
+\section{More Information on Microplots}
+The \pkg{microplot} package shows simple examples with \pkg{lattice},
+ \pkg{ggplot2}, and \pkg{base} graphics.
+
+The \pkg{microplot} package shows simple examples in \LaTeX\
+using the \proglang{R} packages
+\pkg{Sweave}, \pkg{knitr}, and \pkg{rmarkdown}, and the
+\proglang{Emacs} package \pkg{org-mode}.
+
+The \pkg{microplot} package shows simple examples in \proglang{HTML} using
+the \proglang{R} package \pkg{rmarkdown} and the \proglang{Emacs} package \pkg{org-mode}.
+
+
+
+%\vspace*{-2ex}
+\begin{tabular}{ll}
+\hspace*{-.72em}
+\begin{minipage}[b]{6in}
+\begin{verbatim}
+utils::install.packages("microplot", dependencies=TRUE)
+## this includes HH and its dependencies
+\end{verbatim}
+
+The \pkg{HH} package is designed to accompany\\
+{\it Statistical Analysis and Data Display, Second Edition}\\
+Richard M. Heiberger and Burt Holland\\
+Springer 2015\\
+\url{http://www.springer.com/us/book/9781493921218}
+%The Second Edition (we call it HH2) was released late December 2015.
+%All examples in the book can be reproduced in \proglang{R}
+% with the \pkg{HH} package available in CRAN.
+%% require(HH)
+
+\end{minipage}
+&
+\begin{minipage}[b]{1.5in}
+\includegraphics[width=\textwidth, trim=205 245 205 245, clip=true]{HH2.pdf}
+\end{minipage}
+\end{tabular}
+
+
+
+\end{document}
+
+
+## Emacs keystrokes from latex-mode
+## Local Variables:
+## eval: (global-set-key "\C-c\C-n" 'ess-eval-line-and-step)
+## eval: (global-set-key "\C-c\C-c" 'ess-eval-region-or-function-or-paragraph-and-step)
+## eval: (global-set-key "\C-c\C-r" 'ess-eval-region)
+## eval: (define-key LaTeX-mode-map "\C-c\C-n" 'ess-eval-line-and-step)
+## eval: (define-key LaTeX-mode-map "\C-c\C-c" 'ess-eval-region-or-function-or-paragraph-and-step)
+## eval: (define-key LaTeX-mode-map "\C-c\C-r" 'ess-eval-region)
+## End:
