@@ -1,4 +1,6 @@
-bwplot      A column of box plots, one for each row of summary data.  This demo uses lattice and HH.  A similar example for lattice, base graphics, and ggplot2 is in the example for ?microplot.
+bwplot Alternate access to the bwplot.lattice demo.
+bwplot.lattice  A column of box plots, one for each row of summary data.  This demo uses lattice and HH.
+boxplot.ggplot   A column of box plots, one for each row of summary data.  This demo uses ggplot2 and HH.
 NTplot      A matrix of normal and t plots, showing increase of power as the degrees of freedom goes up and as the distance  (mu_a - mu_0) increases.  This example uses HH and lattice.
 timeseries  A column of timeseries plots showing the change in behavior over the twelve months of the year, one plot for each year in the sequence.  This example uses lattice.
 iris        A matrix of boxplots for the measurements by species of the iris data.  This example uses lattice.

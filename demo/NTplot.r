@@ -1,5 +1,13 @@
 latexCheckOptions()
 
+if (FALSE) { ## These are the settings for my machines
+  ## Set options for Hmisc::latex
+  options(latexcmd='pdflatex')
+  options(dviExtension='pdf')
+  options(xdvicmd='open') ## Macintosh, Windows, SMP linux
+  latexCheckOptions()
+}
+
 ## This demo writes a set of pdf files and then uses the Hmisc::latex
 ## function to call LaTeX.
 
@@ -13,7 +21,7 @@ latexCheckOptions()
 ## Richard M. Heiberger and Burt Holland, Springer 2015.
 ##      http://www.springer.com/us/book/9781493921218
 
-library(lattice)
+library(HH)
 
 pdf("NTplots%03d.pdf", onefile=FALSE, height=3.5, width=6) ## inch
 for (mu1 in c(2, 2.5, 3, 3.5))
@@ -26,12 +34,11 @@ for (mu1 in c(2, 2.5, 3, 3.5))
                      df=degFreedom,
                      distribution.name=if (degFreedom==Inf) "z" else "t",
                      xlim=c(-4, 7), ylim=c(0, .45),
-                     scales=list(alternating=0),
                      par.settings=
                        list(layout.widths=list(
                               left.padding=5,
                               ylab=0,  ## the values of ylab for normal
-                              ## and for have different widths.
+                              ## and for t have different widths.
                               ## Therefore set the width of ylab to zero
                               ## and increase the padding on both sides.
                               ylab.axis.padding=5,

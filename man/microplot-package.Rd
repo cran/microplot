@@ -25,9 +25,9 @@ by any graphical system in R.  We show lattice, base, and ggplot2
 graphics.  The tables can be targeted for display in either LaTeX or
 HTML.  We show both.
 
-The best way to learn this package is to read the example and demo files.
+The best way to learn this package is to read the examples and demo files.
 
-This examples and demo files uses operating system \code{latex} command
+This examples (in the \code{examples} subdirectory) and demo files use operating system \code{latex} command
 and the R \code{pdf()} graphics device.  They therefore require that the
 three options\cr
       \code{options()[c("latexcmd","dviExtension","xdvicmd")]}\cr
@@ -43,7 +43,7 @@ on Macintosh, on Windows, on Linux.
 The \code{"xdvicmd"} option is dependent on details of the operating system.
 The goal is to name the function that opens \code{pdf} files.
 In order to open \code{pdf} files, the \code{"xdvicmd"} option must be specified.
-On systems I have looked, all these work\cr
+On systems I have used, all these work\cr
 \code{options(xdvicmd="open") ## Macintosh, Windows, SMP linux}\cr
 \code{options(xdvicmd="xdg-open") ## ubuntu linux}\cr
 For anything else, you might need to experiment.
@@ -73,11 +73,15 @@ will need to read them closely to see what they are doing.
 
 To run the demos automatically, use
 
-\code{demo("bwplot",     package="microplot", ask=FALSE)}
+\code{demo("bwplot.lattice",     package="microplot", ask=FALSE)}
 
-\code{demo("NTplot",     package="microplot", ask=FALSE)}
+\code{demo("boxplot.ggplot",     package="microplot", ask=FALSE)}
 
-\code{demo("timeseries", package="microplot", ask=FALSE)}
+\code{demo("iris",               package="microplot", ask=FALSE)}
+
+\code{demo("NTplot",             package="microplot", ask=FALSE)}
+
+\code{demo("timeseries",         package="microplot", ask=FALSE)}
 
 The \code{examples} directory
 \code{paste0(system.file(package="microplot"), "/examples")}
@@ -98,6 +102,13 @@ Maintainer: \packageMaintainer{microplot}
 \keyword{ package }
 \keyword{ microplot }
 \keyword{ sparkline }
+\keyword{ LaTeX }
+\keyword{ HTML }
+\keyword{ Excel }
+\keyword{ Sweave }
+\keyword{ knitr }
+\keyword{ rmarkdown }
+\keyword{ org-mode }
 \seealso{
 \code{\link[Hmisc]{latex}}
 }
@@ -265,6 +276,6 @@ options(xdvicmd="xdg-open")  ## ubuntu linux
 
 
 ## Please see the demos for more interesting examples.
-##xs demo(package="microplot")
+## demo(package="microplot")
 
 }

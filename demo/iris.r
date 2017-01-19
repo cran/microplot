@@ -1,9 +1,12 @@
 latexCheckOptions()
-## Set options for Hmisc::latex
-##   options(latexcmd='pdflatex')
-##   options(dviExtension='pdf')
-##   options(xdvicmd='open') ## Macintosh, Windows, SMP linux
-## latexCheckOptions()
+
+if (FALSE) { ## These are the settings for my machines
+  ## Set options for Hmisc::latex
+  options(latexcmd='pdflatex')
+  options(dviExtension='pdf')
+  options(xdvicmd='open') ## Macintosh, Windows, SMP linux
+  latexCheckOptions()
+}
 
 ## This demo writes a set of pdf files and then uses the Hmisc::latex
 ## function to call LaTeX.
