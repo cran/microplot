@@ -2,7 +2,7 @@
 \alias{theme_collapse}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Set the ggplot2 theme to remove all marginal space.
+Set the \pkg{ggplot2} theme to remove all marginal space.
 }
 \description{
   Set the ggplot2 theme to remove all marginal space.

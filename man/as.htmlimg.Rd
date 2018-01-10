@@ -26,7 +26,7 @@ working directory that R is using.
 \item{align}{
 Specifies the alignment of an image according to surrounding elements
 (Not supported in HTML5).
-One of the strings:    "top", "bottom", "middle", "left", "right"
+One of the strings:    \code{"top"}, \code{"bottom"}, \code{"middle"}, \code{"left"}, \code{"right"}
 }
 }
 \value{

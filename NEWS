@@ -1,0 +1,160 @@
+Version: 1.0-25
+---------------
+
+* 2018 Jan 8
+
+* all examples and demos now work with code revisions.
+
+
+Version: 1.0-24
+---------------
+
+* 2018 Jan 04
+
+* completed redesign of latex.trellis, microplot.trellis, as.includegraphics
+
+* demo/LegendrePolynomials, example of matrix of panels with lots of
+  control at the panel level
+
+* simplified coding of example demo/LPrevised.r
+
+* really good version of LegendrePolynomials.r
+
+* Use c.trellis and cbind.trellis to put individual panels into
+  trellis matrix structure and then use latex.trellis on that.
+  Use collapse=() argument to maintain individual appearances on the panels.
+
+* latex method for class microplotMatrix
+
+* prepare for eventual class includegraphicsMatrix, that may actually never be needed.
+
+* key now handled sensibly, with a few more interconnected arguments.
+
+* as.includegraphics kern arguments renamed to hspace.left and hspace.right
+
+* feeeze as is, and start documentation on 1.0-25
+
+
+Version: 1.0-23
+---------------
+
+* 2017 Dec 29
+
+* Move orientation of trellis plots from latex.trellis() to
+  microplot.trellis().  microplot.trellis honors the as.table
+  component of the trellis object.  microplot.trellis() handles
+  tranposed trellis arguments correctly.
+
+* Eventually latex.trellis and latex.ggplot will become essentially
+  identical, both being wrappers for latex.microplot, with the real
+  differences happening in the microplot.trellis and microplot.ggplot
+  functions.
+
+* New argument to latex.trellis: return.value=c("latex","R").  Setting
+  return.value="R" will return the matrix of LaTeX statements that
+  would otherwise be sent to latex for processing.  Returning them
+  here allows the user to cbind the columns with numerical matrices.
+
+* Add scale argument to as.includegraphics.  Change default value of
+  height argument to height=NULL in as.includegraphics.
+
+* New arguments to microplot.trellis: height.x.axis=height, width.y.axis=width,
+
+
+Version: 1.0-22
+---------------
+
+* 2017 Dec 27
+
+* Tighten up demos so they don't need library(Hmisc)
+
+* Add new arguments to as.includegraphics, primarily to allow for
+  horizontal and vertical control of the positioning of the axes.
+
+* Add new arguments x.axis, y.axis, height.as, width.as, raise, kern
+  to latex.trellis that will be forwarded to as.includegraphics.
+
+* Replace previous demo/timeseries.r with a more interesting
+  timeseries example containing a collection of rearrangements of a
+  set of annual plots.  The demo illustrates arranging a vector of
+  panels into a matrix, and control of the placement of common axes in
+  the LaTeX table containing the individual panels.
+
+* microplot arguments height and width now default to 1 (numeric, inches).
+
+
+Version: 1.0-21
+---------------
+
+* 2017 Dec 23
+
+* microplot.trellis has new collapse argument for function which will zero out unwanted
+  layout.heights and layout.widths space.
+
+* latex.trellis uses collapse argument
+
+* axis now works for both x and y
+
+* removed target argument
+
+* removed most microplot.ggplot placeholder functions
+
+* now passes --run-dontrun
+
+* still needs a few functions documented
+
+
+
+Version: 1.0-20
+---------------
+
+* 2017 Dec 18
+
+* microplot.trellis: include all device options in the microplot.trellis function itself.
+
+
+Version: 1.0-19
+---------------
+
+* 2017 Dec 18
+
+* latex.trellis for one- and two-dimension "trellis" objects.
+
+
+Version: 1.0-18
+---------------
+
+* 2017 Jul 29
+
+* microplot and microplot.xxx methods improved.
+
+* microplot.trellis handles a "trellis" object tt with (length(dim(tt)) == 2)
+
+* Functions introduced in 1.0-17 are now documented.
+
+* NAMESPACE
+
+* more demos
+
+
+Version: 1.0-17
+---------------
+
+* 2017 Jun 26
+
+* generic function microplot() with complete set of methods for
+  lattice, and examples of methods for ggplot2.
+
+* generic function MSWord() with several specialized methods (based on
+  ReporteRs package).
+
+* AEdotplot methods and demos for latex() and MSWord()
+
+* as.includegraphics retains attributes of argument (especially dim
+  and dimnames)
+
+
+Version: 1.0-16
+---------------
+
+* on CRAN: 2017-01-19

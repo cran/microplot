@@ -1,14 +1,14 @@
+## These are the settings for my machines
+## Set options for Hmisc::latex
+options(latexcmd='pdflatex')
+options(dviExtension='pdf')
+if (nchar(Sys.which("open"))) {
+  options(xdvicmd="open")      ## Macintosh, Windows, SMP linux
+} else {
+  options(xdvicmd="xdg-open")  ## ubuntu linux
+}
 latexCheckOptions()
 
-if (FALSE) { ## These are the settings for my machines
-  ## Set options for Hmisc::latex
-  options(latexcmd='pdflatex')
-  options(dviExtension='pdf')
-  options(xdvicmd='open') ## Macintosh, Windows, SMP linux
-  latexCheckOptions()
-}
-
-library(HH)
 
 ## This demo writes a set of pdf files and then uses the Hmisc::latex
 ## function to call LaTeX.
@@ -59,35 +59,17 @@ t(tmp)[4:1,]
 BW <-
 lattice::bwplot(HH::unpositioned(current) ~ y.adj | current, data=cc176,
        panel=HH::panel.bwplot.intermediate.hh,
-       xlab=NULL,
-       par.settings=list(
-         layout.heights=layoutHeightsCollapse(),
-         layout.widths=layoutWidthsCollapse(),
-         axis.line=list(col="transparent")),
-       layout=c(1,1),
-       scales=list(y=list(relation="free"))
-       )
+       strip=FALSE, layout=c(1,4), scales=list(y=list(relation="free")))
+BW
 
-pdf("cc176bwplot%03d.pdf", onefile=FALSE, height=.4, width=3)  ## inch ## BB = 0 0 216 28
-BW  ## four individual boxplots without axes
-update(BW[3], ## x-axis
-       par.settings=list(layout.heights=list(axis.bottom=1, panel=0),
-                         axis.line=list(col="black")))
-dev.off()
+graphnames <- microplot(BW, height=.3, width=2)
 
-graphnames <- c(
-"cc176bwplot001.pdf",
-"cc176bwplot002.pdf",
-"cc176bwplot003.pdf",
-"cc176bwplot004.pdf",
-"cc176bwplot005.pdf")
-
-graphicsnames <- as.includegraphics(graphnames)
+graphicsnames <- as.includegraphics(graphnames, raise="-.8em")
 
 treatment <-
-data.frame(rbind(format(t(tmp), digits=4), ""),
-           bwplot=graphicsnames,
-           check.names=FALSE)[c(4:1, 5),]
+data.frame(rbind(format(t(tmp)[4:1,], digits=4), " "=""),
+           bwplot=c(graphicsnames, attr(graphicsnames,"axis.names")["x"]),
+           check.names=FALSE)
 treatment
 
 ## Without a displayed x-axis
@@ -99,3 +81,15 @@ cc176.latex  ## this line requires latex in the path
 cc176x.latex <- Hmisc::latex(treatment, rowlabel="Treatment")
 cc176x.latex$style <- "graphicx"
 cc176x.latex  ## this line requires latex in the PATH
+
+
+## using latex.trellis
+Hmisc::latex(BW, height=.25, width=1.5, raise="-1.8ex", x.axis=TRUE, y.axis=FALSE)
+
+Hmisc::latex(update(BW, as.table=TRUE), height=.25, width=1.5, raise="-1.8ex", x.axis=TRUE, y.axis=FALSE)
+
+## capture intermediate from latex.trellis, and join with numbers
+boxes <- Hmisc::latex(BW, height=.25, width=1.5, raise="-1.8ex", x.axis=TRUE, y.axis=FALSE, return="R")
+together <- Hmisc::latex(cbind( rbind(format(t(tmp)[4:1,], digits=4), ""), boxes))
+together$style <- "graphicx"
+together  ## this line requires latex in the PATH

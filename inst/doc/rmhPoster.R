@@ -1,7 +1,7 @@
 ### R code from vignette source 'rmhPoster.Rtex'
 
 ###################################################
-### code chunk number 1: rmhPoster.Rtex:15-144
+### code chunk number 1: rmhPoster.Rtex:15-148
 ###################################################
 library(lattice)
 library(latticeExtra)
@@ -10,7 +10,11 @@ library(microplot)
 ## options needed by Hmisc::latex
 options(latexcmd='pdflatex')
 options(dviExtension='pdf')
-options(xdvicmd='open') ## Macintosh, Windows, SMP linux
+if (nchar(Sys.which("open"))) {
+  options(xdvicmd="open")      ## Macintosh, Windows, SMP linux
+} else {
+  options(xdvicmd="xdg-open")  ## ubuntu linux
+}
 ## Hmisc::latex
 
 

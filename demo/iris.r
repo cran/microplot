@@ -1,12 +1,14 @@
+## These are the settings for my machines
+## Set options for Hmisc::latex
+options(latexcmd='pdflatex')
+options(dviExtension='pdf')
+if (nchar(Sys.which("open"))) {
+  options(xdvicmd="open")      ## Macintosh, Windows, SMP linux
+} else {
+  options(xdvicmd="xdg-open")  ## ubuntu linux
+}
 latexCheckOptions()
 
-if (FALSE) { ## These are the settings for my machines
-  ## Set options for Hmisc::latex
-  options(latexcmd='pdflatex')
-  options(dviExtension='pdf')
-  options(xdvicmd='open') ## Macintosh, Windows, SMP linux
-  latexCheckOptions()
-}
 
 ## This demo writes a set of pdf files and then uses the Hmisc::latex
 ## function to call LaTeX.
@@ -22,25 +24,9 @@ irisBW <- lattice::bwplot( ~ value | Species * variable, data=iris.melt)
 irisBW
 latticeExtra::useOuterStrips(irisBW)
 
-irisBW.update <-
-update(irisBW,
-       xlab=NULL,
-       par.settings=list(
-         layout.heights=layoutHeightsCollapse(),
-         layout.widths=layoutWidthsCollapse(),
-         axis.line=list(col="transparent")),
-       layout=c(1,1)
-       )
+graphnames <- microplot(irisBW, height=.4, width=1, device="pdf") ## inches
 
-pdf("irisBW%03d.pdf", onefile=FALSE, height=.4, width=1.6)  ## inch ## BB = 0 0 216 28
-irisBW.update  ## twelve individual boxplots without axes
-dev.off()
-
-graphnames <- paste0("irisBW", sprintf("%03i", 1:12), ".pdf")
-
-graphicsnames <- t(matrix(as.includegraphics(graphnames, height="2em", raise="-1.3ex"),
-                          nrow=3, ncol=4,
-                          dimnames=dimnames(irisBW)))
+graphicsnames <- as.includegraphics(graphnames, height="2em", raise="-1.3ex")
 
 ## 12 box plots in 4 rows and 3 columns
 BW.latex <- Hmisc::latex(graphicsnames,
@@ -61,15 +47,15 @@ iris2 <- array(iris.melt$value,
                  levels(iris.melt$variable)))
 iris2.fivenum <- apply(iris2, 2:3, fivenum)
 dimnames(iris2.fivenum)[[1]] <- c("min", "Q1", "med", "Q3", "max")
+iris2.fivenum.f <- format(iris2.fivenum, nsmall=2)
 
-## Species and Measurement in same columns, Measurement names adjusted to be unique
 BW5num <-
 rbind(
-data.frame(t(iris2.fivenum[,1,]), "Box Plots"=graphicsnames[,1], check.names=FALSE),
-data.frame(t(iris2.fivenum[,2,]), "Box Plots"=graphicsnames[,2], check.names=FALSE),
-data.frame(t(iris2.fivenum[,3,]), "Box Plots"=graphicsnames[,3], check.names=FALSE))
+cbind(t(iris2.fivenum.f[,1,4:1]), "Box Plots"=graphicsnames[,1]),
+cbind(t(iris2.fivenum.f[,2,4:1]), "Box Plots"=graphicsnames[,2]),
+cbind(t(iris2.fivenum.f[,3,4:1]), "Box Plots"=graphicsnames[,3]))
 
-BW5num.latex <- Hmisc::latex(BW5num,
+BW5num.latex <- Hmisc::latex(format(BW5num, nsmall=2),
                              rowlabel="Measurement",
                              rgroup=levels(iris.melt$Species),
                              n.rgroup=c(4,4,4),
@@ -81,23 +67,9 @@ BW5num.latex$style <- "graphicx"
 BW5num.latex  ## this line requires latex in the path
 
 
-## Species and Measurement in separate columns
-BW5num <-
-rbind(
-data.frame(t(iris2.fivenum[,1,]), "Box Plots"=graphicsnames[,1], check.names=FALSE),
-data.frame(t(iris2.fivenum[,2,]), "Box Plots"=graphicsnames[,2], check.names=FALSE),
-data.frame(t(iris2.fivenum[,3,]), "Box Plots"=graphicsnames[,3], check.names=FALSE))
-BW5num$Measurement=levels(iris.melt$variable)
-BW5num <- BW5num[, c(7,1:6)]
+## with the latex.trellis function just the figure, no numerical values
 
-BW5num.latex <- Hmisc::latex(BW5num,
-                             rowname=" ",
-                             rowlabel="Species",
-                             rgroup=levels(iris.melt$Species),
-                             n.rgroup=c(4,4,4),
-                             cgroup=c("", "Five Number Summary", ""),
-                             n.cgroup=c(1, 5, 1),
-                             caption="Five Number Summary and Box Plots for each Species and Measurement.",
-                             label="irisBW5num")
-BW5num.latex$style <- "graphicx"
-BW5num.latex  ## this line requires latex in the path
+Hmisc::latex(irisBW, height=.3, raise="-2ex", y.axis=FALSE)
+
+Hmisc::latex(t(irisBW), height=.3, raise="-2ex", y.axis=FALSE)
+t(irisBW)

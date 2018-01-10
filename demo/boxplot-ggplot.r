@@ -1,14 +1,15 @@
+## These are the settings for my machines
+## Set options for Hmisc::latex
+options(latexcmd='pdflatex')
+options(dviExtension='pdf')
+if (nchar(Sys.which("open"))) {
+  options(xdvicmd="open")      ## Macintosh, Windows, SMP linux
+} else {
+  options(xdvicmd="xdg-open")  ## ubuntu linux
+}
 latexCheckOptions()
 
-if (FALSE) { ## These are the settings for my machines
-  ## Set options for Hmisc::latex
-  options(latexcmd='pdflatex')
-  options(dviExtension='pdf')
-  options(xdvicmd='open') ## Macintosh, Windows, SMP linux
-  latexCheckOptions()
-}
 
-library(HH)
 library(ggplot2)
 
 ## This demo writes a set of pdf files and then uses the Hmisc::latex
@@ -35,7 +36,6 @@ library(ggplot2)
 ##
 ## This example starts with a minimal script based on chunks 1, 2, 4, 6
 data(cc176, package="HH")
-data(col3x2, package="HH")
 cc176.aov <- aov(wt.d ~ rep + wt.n + n.treats*minutes*current,
                  data=cc176)
 
@@ -56,7 +56,6 @@ t(tmp)[4:1,]
 
 
 ## the next section is the new material using the microplot package.
-##
 
 ## make single plot with all features
 BW <- ggplot(cc176, aes(current, y.adj)) +
@@ -64,49 +63,18 @@ BW <- ggplot(cc176, aes(current, y.adj)) +
   coord_flip()
 BW  ## on interactive device
 
-BW +
-  xlab(NULL) + ylab(NULL) +
-  theme_collapse(axis.ticks=element_line(),
-                 axis.ticks.y = element_blank(),
-                 axis.text=element_text(),
-                 axis.text.y = element_blank(),
-                 axis.title=element_text(),
-                 axis.line.x=element_line(color="black"))
-## on interactive device
-
+## remove background, labels, margins
 BW+theme_collapse() ## on interactive device
 
-BW.xlim <- BW$coordinates$limits$x  ## save x limits
+## I really want microplot() here.  I am not familiar enough with ggplot to write that function myself.
+## microplot_yfactor.ggplot is designed for this special case of a factor on the y-axis.
+graphnames <- microplot_yfactor(BW, height=.2, width=2, n=length(levels(cc176$current))) ## inches  ## latex, pdf
 
-pdf("cc176boxplot%03d.pdf", onefile=FALSE, height=.4, width=3)  ## inch ## BB = 0 0 216 28
-for (i in 1:length(levels(cc176$current))) { ## four individual boxplots without axes
-  BW$coordinates$limits$x <- c(i, i)
-  print(BW + theme_collapse())
-}
-BW$coordinates$limits$x <- c(-1, -1)
-BW + xlab(NULL) + ylab(NULL) +
-  theme_collapse(axis.ticks=element_line(),
-                 axis.ticks.y = element_blank(),
-                 axis.text=element_text(),
-                 axis.text.y = element_blank(),
-                 axis.title=element_blank(),
-                 axis.line.x=element_line(color="black"))
-dev.off()
-
-BW$coordinates$limits$x <- BW.xlim  ## restore x limits
-
-graphnames <- c(
-"cc176boxplot001.pdf",
-"cc176boxplot002.pdf",
-"cc176boxplot003.pdf",
-"cc176boxplot004.pdf",
-"cc176boxplot005.pdf")
-
-graphicsnames <- as.includegraphics(graphnames)
+graphicsnames <- as.includegraphics(graphnames, raise="-.6em")
 
 treatment <-
 data.frame(rbind(format(t(tmp), digits=4), ""),
-           boxplot=graphicsnames,
+           boxplot=c(graphicsnames, attr(graphicsnames,"axis.names")["x"]),
            check.names=FALSE)[c(4:1, 5),]
 treatment
 
@@ -119,3 +87,6 @@ cc176.latex  ## this line requires latex in the path
 cc176x.latex <- Hmisc::latex(treatment, rowlabel="Treatment")
 cc176x.latex$style <- "graphicx"
 cc176x.latex  ## this line requires latex in the PATH
+
+
+detach("package:ggplot2")

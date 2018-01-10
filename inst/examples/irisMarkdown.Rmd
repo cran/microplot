@@ -20,8 +20,13 @@ The file was run by
 knitr::knit("irisMarkdown.Rmd")
 options(latexcmd='pdflatex')
 options(dviExtension='pdf')
+if (nchar(Sys.which("open"))) {
+  options(xdvicmd="open")      ## Macintosh, Windows, SMP linux
+} else {
+  options(xdvicmd="xdg-open")  ## ubuntu linux
+}
 options(xdvicmd='open') ## Macintosh, Windows, SMP linux
-## see ?microplot for xdvicmd for other linux systems
+
 Hmisc::dvi(irisMarkdown.latex, width=8.5, height=11, nomargins=FALSE)
 \end{verbatim}
 

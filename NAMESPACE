@@ -1,2 +1,42 @@
-exportPattern("^[[:alpha:]]+")
+## exportPattern("^[[:alpha:]]+")
+export(
+  MSWord,
+  MSWord_TablePlusGraphicColumn,
+  microplot,
+  microplot_yfactor,
+  layoutHeightsCollapse,
+  layoutWidthsCollapse,
+  layoutCollapse,
+  as.htmlimg,
+  as.includegraphics,
+  as.orgfile,
+  as.orgtable,
+  theme_collapse,
+  latexCheckOptions
+)
 importFrom(Hmisc, latex)
+importFrom(stats, update)
+importFrom(grDevices, dev.off, pdf, png, postscript)
+if (version$os == "mingw32") importFrom(grDevices, win.metafile)
+importFrom(grid, grid.newpage)
+importFrom(lattice, draw.key)
+importFrom(HH, AEdotplot)
+importFrom(ReporteRs, FlexTable, addFlexTable, addHeaderRow, addParagraph,
+  borderNone, borderProperties, cellProperties,  docx, parProperties, pot_img,
+  setFlexTableBorders, setFlexTableWidths, textProperties, writeDoc)
+importFrom(ggplot2, element_blank, element_line, element_text, xlab, ylab)
+importFrom(htmltools, save_html, browsable, HTML)
+
+## register all the methods for generics elsewhere in case namespace is
+## loaded but not currently attached.
+S3method(microplot, trellis)
+S3method(microplot, ggplot)
+S3method(microplot, AEdotplot)
+S3method(latex, AEdotplot)
+S3method(latex.AEdotplot, microplot)
+S3method(latex, trellis)
+S3method(latex, includegraphicsMatrix)
+S3method(MSWord, AEdotplot)
+S3method(MSWord.AEdotplot, microplot)
+S3method(microplot_yfactor, ggplot)
+## S3method(as.includegraphics, microplotMatrix) ## in case I decide to make this into a method
