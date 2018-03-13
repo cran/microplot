@@ -1,140 +1,193 @@
+latex.graphicsClass <-
+  function(object,
+           figPrefix=first.word(deparse(substitute(object))),
+           title=figPrefix, ## subject to lazy evaluation
+           ##
+           ## microplot arguments
+           device={
+             latexcmd <- options()$latexcmd
+             if (is.null(latexcmd))
+               latexcmd <- "latex"
+             switch(latexcmd,
+                    pdflatex="pdf",
+                    latex=,
+                    "postscript")
+           },
+           ... ## can include arguments to
+           ## latex.graphicsClass,
+           ## microplot,
+           ## as.includegraphics,
+           ## latex.includegraphicsMatrix,
+           ## latex.default
+           )
+{
+  ## change "." to "-" in figPrefix
+  ##  The 'latex' macro \code{\\includegraphics} requires that there be no
+  ##  \code{"."} in the filename basename.
+  figPrefix <- RemoveDot(figPrefix)
+  dir.verify(figPrefix)
+
+  ## microplot.* for object class: trellis, ggplot, graphicList
+  mm <- microplot(object=object,
+                  figPrefix=paste0(figPrefix,"/fig"),
+                  device=device, ...)
+  ## mm is a matrix of characters containing filenames, with 0, 1, 2, or 3 attributes
+  ## with class="microplotMatrix"
+
+  ii <- as.includegraphics(mm, ...)
+
+  latex(ii, title=title, microplotMatrix=mm, ...) ## ii is an "includegraphicsMatrix"
+}
+
+
 latex.trellis <-
-  function(## microplot arguments
-           object=stop("trellis object is required", call. = FALSE), ## object must have class "trellis"
-           obji=NULL, ## Vector or matrix of trellis objects, with dimnames, normally each containing one panel.
-           ##         ## When obji is non-null, the axes and key will be taken from object.
-           ##         ## We need object to be a trellis object so the latex generic will dispatch to latex.trellis.
-           figPrefix=Hmisc::first.word(deparse(substitute(object))),
-           device=c("pdf","postscript","png", ## other devices require a user-written function
-                    if (version$os == "mingw32") "win.metafile"),
-           height=1, width=1, ## microplot, numeric, in inches
-           collapse=layoutCollapse, ## see below for example ## zero out unwanted layout.heights and layout.widths.
-           height.x.axis=height,
-           par.settings.x.axis=
-             list(layout.heights=list(panel=0, axis.bottom=1, axis.xlab.padding=1, xlab=1),
-                  axis.line=list(col="black")),
-           width.y.axis=width,
-           par.settings.y.axis=
-             list(layout.widths=list(ylab=1, ylab.axis.padding=1, axis.left=1, panel=0),
-                  axis.line=list(col="black")),
-           key=FALSE,    ## FALSE or a list of arguments defining a key
-           height.key=height, width.key=width,
-           ##
-           ## as.includegraphics arguments
-           height.as=NULL, ## character with TeX units, for example "1in"
-           width.as=NULL,  ## keeps aspect ratio
-           scale=NULL,     ## ignored if either height.as or width.as is specified.
-           raise=NULL,     ## argument to as.includegraphics
-           hspace.left=NULL,  ## argument to as.includegraphics
-           hspace.right=NULL, ## argument to as.includegraphics
-           wd=getwd(),     ## working directory for graphics files
-           viewport=NULL,  ## if specified, then left bottom right top (character)
-           ## used for pdf png jpeg
-           ## See MediaBox in pdf file.
-           ## Ask operating system for png or jpg file.
-           bb=NULL, ## if specified, then left bottom right top (character)
-           ## used for bmp tiff ps, ask operating system for values
-           trim=NULL, ## for example, "0 0 0 0" left bottom right top (character)
-           x.axis.includegraphics=TRUE, ## logical or a list of arguments
-           y.axis.includegraphics=TRUE, ## logical or a list of arguments
-           key.includegraphics=is.list(key),  ## logical or a list of arguments
-           ##
-           ## latex.includegraphicsMatrix arguments, including arguments to latex.default
-           ...) {
-
-    ## microplot will zero out unwanted layout.heights and layout.widths space.
-    ## for example:
-    ## latex(tt, collapse=function(x) layoutCollapse(x,
-    ##                                               layout.heights=list(axis.bottom=.3),
-    ##                                               layout.widths=list(axis.left=.3),
-    ##                                               axis.line=list(col="green")))
-
-    ## microplot.trellis
-    mm <- microplot(object=object,
-                    figPrefix=figPrefix,
-                    device=device,
-                    height=height, width=width, ## numeric, in inches
-                    collapse=collapse,
-                    height.x.axis=height.x.axis,
-                    par.settings.x.axis=par.settings.x.axis,
-                    width.y.axis=width.y.axis,
-                    par.settings.y.axis=par.settings.y.axis,
-                    key=key,
-                    height.key=height.key, width.key=width.key)
-    if (!is.null(obji)) {
-      mm1 <- mm
-      mm <- array(character(length(obji)), dim(obji), dimnames(obji))
-      for (i in 1:length(obji))
-        mm[i] <- microplot(object=obji[[i]],
-                           figPrefix=paste0(figPrefix, sprintf("%3.3i",i)),
-                           device=device,
-                           height=height, width=width, ## numeric, in inches
-                           collapse=collapse,
-                           height.x.axis=height.x.axis,
-                           par.settings.x.axis=par.settings.x.axis,
-                           width.y.axis=width.y.axis,
-                           par.settings.y.axis=par.settings.y.axis,
-                           key=FALSE,
-                           height.key=height.key, width.key=width.key)
-      attr(mm, "axis.names") <- attr(mm1, "axis.names")
-      attr(mm, "key.name") <- attr(mm1, "key.name")
-      class(mm) <- class(mm1)
-    }
-    ## mm is a matrix of characters containing filenames, with 0, 1, or 2 attributes
-    ## with class="microplotMatrix"
+  function(object=stop("trellis object is required", call. = FALSE),
+           figPrefix=first.word(deparse(substitute(object))),
+           title=figPrefix, ## subject to lazy evaluation
+           ... ## can include arguments to
+           ## latex.graphicsClass,
+           ## microplot,
+           ## as.includegraphics,
+           ## latex.includegraphicsMatrix,
+           ## latex.default
+           )
+{
+  force(title)
+  latex.graphicsClass(object, figPrefix=figPrefix, title=title, ...)
+}
 
 
-    ii <- as.includegraphics(mm, height=height.as, width=width.as,
-                             scale=scale, raise=raise, hspace.left=hspace.left, hspace.right=hspace.right, wd,
-                             viewport, bb, trim,
-                             x.axis=x.axis.includegraphics,
-                             y.axis=y.axis.includegraphics,
-                             key=key.includegraphics)
-    ## class(ii) <- "includegraphicsMatrix"
-    ## ii is a matrix of characters containing \\includegraphics{} statements, with 0, 1, or 2 attributes
+latex.ggplot <-
+  function(object=stop("ggplot object is required", call. = FALSE),
+           figPrefix=first.word(deparse(substitute(object))),
+           title=figPrefix, ## subject to lazy evaluation
+           ... ## can include arguments to
+           ## latex.graphicsClass,
+           ## microplot,
+           ## as.includegraphics,
+           ## latex.includegraphicsMatrix,
+           ## latex.default
+           )
+{
+  force(title)
+  latex.graphicsClass(object, figPrefix=figPrefix, title=title, ...)
+}
 
-    latex.includegraphicsMatrix(ii, title=figPrefix, ...) ## method called directly because the class is not currently in use
- }
+
+latex.graphicsList <-
+  function(object=stop("graphicsList object is required", call. = FALSE),
+           ## matrix or vector of trellis objects or ggplot objects,
+           ## with dim and dimnames,
+           ## normally each containing one panel.
+           ## The axes and key will be taken from object[[1]].
+           figPrefix=first.word(deparse(substitute(object))),
+           title=figPrefix, ## subject to lazy evaluation
+           ... ## can include arguments to
+           ##     microplot,
+           ##     as.includegraphics,
+           ##     latex.includegraphicsMatrix,
+           ##     latex.default
+           )
+{
+  force(title)
+  latex.graphicsClass(object, figPrefix=figPrefix, title=title, ...)
+}
 
 
 latex.includegraphicsMatrix <-
-  function(ii, ## ii is not currently an includegraphicsMatrix object.
-           rowlabel="rowname", ## latex, column heading of row dimnames
-           title="figPrefix",  ## latex.default
-           rowseparator=FALSE,
-           return.value=c("latex","R"),
-           bottom=if (!is.null(attr(ii, "key.name")))
-                    attr(ii, "key.name"),
+  function(object,
+           dataobject, data.first=TRUE,
+           title=first.word(deparse(substitute(object))),
+           microplotMatrix=NULL,
+           arraystretch=1,     ## The normal interrow space is multiplied by arraystretch,
+           ##                     so changing it from its default value of 1 to 1.5 makes
+           ##                     the rows 1.5 times farther apart.
+           ##                     Uses the latex.default argument 'insert.top'.
+           bottom.hline.raise=NULL, ## character string with latex unit, for example "-10ex"
+           ##        arraystretch interferes with bottom.hline.raise
+           ##        Pick arraystretch first.
+           bottom=if (!is.null(attr(object, "key.name"))) ## used as insert.bottom in latex.default
+                    attr(object, "key.name"),
+           col.just.object=rep("c", ncol(object)),
+           col.just.dataobject=rep("r", ncol(dataobject)),
+           n.cgroup=NULL, ## generated below if cgroup is specified in ... and n.cgroup is not
            ...) { ## arguments to latex.default
-  return.value <- match.arg(return.value)
+    force(bottom)
+    force(title)
+    if (!missing(object)) {
+      object <- as.matrix(object)
+      force(col.just.object)
+    }
+    if (!missing(dataobject)) {
+      dataobject <- as.matrix(dataobject)
+      force(col.just.dataobject)
+    }
+
+    ii <- object
+
+    if (missing(dataobject)) {
+      col.just <- col.just.object
+    } else {
+    ndiff <- nrow(object) - nrow(dataobject)
+    for (i in seq(length=ndiff)) dataobject <- rbind(dataobject,"")
+
+    ncol.object <- ncol(object)
+    ncol.dataobject <- ncol(dataobject)
+
+    cgroup <- list(...)$cgroup
+    need.spacer <- is.null(cgroup)
+    ## n.cgroup ## generated below if cgroup is specified in ... and n.cgroup is not
 
 
-  ## all four of these must be defined before changing ii below
-  ncol.ii <- ncol(ii)
-  y.axis <- attr(ii, "axis.names")["y"]
-  if (length(y.axis)==0 || is.na(y.axis)) y.axis <- NULL
-  x.axis <- attr(ii, "axis.names")["x"]
-  if (length(x.axis)==0 || is.na(x.axis)) x.axis <- NULL
-  force(bottom)
+    if (data.first) {
+      if (!is.null(cgroup) & is.null(n.cgroup))
+        n.cgroup <- c(ncol.dataobject, ncol.object)
+      object <- cbind(dataobject, " "=""[need.spacer], object)
+      col.just <- c(col.just.dataobject,
+                    "c"[need.spacer], ## spacer
+                    col.just.object)
+    } else {
+      if (!is.null(cgroup) & is.null(n.cgroup))
+        n.cgroup <- c(ncol.object, ncol.dataobject)
+      object <- cbind(object, " "=""[need.spacer], dataobject)
+      col.just <- c(col.just.object,
+                    "c"[need.spacer], ## spacer
+                    col.just.dataobject)
+    }
 
-  if (!is.null(y.axis)) ii <- cbind(" "=y.axis, ii)
 
-  if (!is.null(x.axis))
-    ii <- rbind(ii,
-                c(if (!is.null(y.axis)) " ", ## "y.axis" is correct
-                  rep(x.axis, ncol.ii)))
-
-  if (rowseparator) {
-    ii2 <- rbind(ii, ii)
-    ii2[seq(1, nrow(ii2), 2),] <- " "
-    ii2[seq(2, nrow(ii2), 2),] <- ii
-    rownames(ii2) <- as.vector(rbind(" ", rownames(ii)))
-    ii <- ii2
   }
 
-  if (return.value == "R") return(ii)
+  insert.top <- if (arraystretch==1)
+                  ""
+                else
+                  paste0("}\\renewcommand{\\arraystretch}{", arraystretch, "}{")
 
-  ll <- latex(ii, title=title, rowlabel=rowlabel, insert.bottom=bottom, ...)
+  if (!is.null(bottom.hline.raise))
+    object[nrow(object), ncol(object)] <-
+      paste0(object[nrow(object), ncol(object)], "\\\\[", bottom.hline.raise, "]")
+
+  ll <- latex(unclass(object), title=title,
+              insert.bottom=bottom, insert.top=insert.top,
+              col.just=col.just,
+              n.cgroup=n.cgroup,
+              ...) ## ... includes cgroup
+  class(ll) <- c("latexConsole", class(ll))
   ll$style <- "graphicx"
+
+  attr(ll, "microplotMatrix") <- microplotMatrix
+  attr(ll, "includegraphicsMatrix") <- ii
+
   ll
 }
+
+latex.microplotMatrix <-
+  function(object,
+           title=first.word(deparse(substitute(object))),
+           ...) {
+    force(title)
+    latex(as.includegraphics(object, ...), title=title, ...)
+}
+
+dir.verify <- function(path)
+  if (dir.exists(path)) TRUE else (dir.create(path) == TRUE) ## forces a visible return value

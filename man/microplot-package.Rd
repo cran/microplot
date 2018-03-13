@@ -3,7 +3,8 @@
 \alias{sparkline}
 \docType{package}
 \title{
-\packageTitle{microplot}
+  Display microplots (sparklines) from R graphics panels in tables in
+  'LaTeX', 'Word', 'HTML', 'Excel'.
 }
 \description{
 \packageDescription{microplot}
@@ -20,78 +21,87 @@ is known as a sparkline.
 
 The examples in this package show tables of simple or complex graphs
 placed into one or more columns of a table.  The graphs can be produced
-by any graphical system in 'R'.  We show \pkg{lattice}, \pkg{base}, and \pkg{ggplot2}
-graphics.  The tables can be targeted for display in 'LaTeX', 'MS Word', 'MS
-Excel', or 'HTML'.  We show examples of each.
+by any graphical system in 'R'.  We show \pkg{lattice}, \pkg{ggplot2}, and \pkg{base}
+graphics.  The tables can be targeted for display in 'LaTeX', 'MS Word'
+on any operating system, 'MS Excel' on 'Windows', or 'HTML'.  We show examples of each.
 
-The best way to learn this package is to read the examples and demo
-files.
+The functions produce valid 'LaTeX' \code{.tex} files or 'Word'
+\code{.docx} files in the working directory.  If 'LaTeX' or 'Word' are
+installed, then the generated files can be displayed on screen as
+illustrated in the help file examples and the \code{demo} directory.  The
+\code{.tex} files can be \code{\\include}d in a larger \code{.tex} file.
+Or the generated \code{.pdf} file can be displayed in `LaTeX' with
+an \code{\\includegraphics} statement.
+The images in the displayed \code{.docx} file can be copied and pasted
+into a larger 'Word' file.
+
+The best way to learn this package is to read the examples and \code{demo} files.
 The primary function \code{\link{microplot}} takes a \code{trellis} or \code{ggplot}
 object and generates a set of graphics files, one per panel of a
-multi-panel display.
+multi-panel display.  The \code{latex} and \code{msWprd} functions place
+the graphics files into a table.
 
-The \code{latex} examples (in the \code{examples} subdirectory) and demo
-files use operating system \code{pdflatex} or \code{latex} command
-and the 'R' \code{pdf()} graphics device.  They therefore require that the
+The \code{latex} examples (in the help file \code{examples}) and \code{demo}
+files use the operating system \code{pdflatex} command with the 'R'
+\code{pdf()} or \code{png()} graphics device.  Or they could use the
+operating system \code{latex} command with the 'R'
+\code{ps()} graphics device.  They therefore require that the
 three options\cr
    \code{options()[c("latexcmd","dviExtension","xdvicmd")]}\cr
-all be set to non-\code{NULL} values.
-Please see the "System options" in the "Details" section of\cr
-\code{\link[Hmisc]{latex}} for discussion of the options available.
+   all be set consistently.
+   The recommended settings for \code{pdflatex} with \code{pdf} graphics files
+   are included as the defaults in the function call\cr
+   \code{latexSetOptions()}\cr
+   The recommended settings for \code{latex} with \code{ps} graphics files
+   may be specified with the function call\cr
+   \code{latexSetOptions("latex")}\cr
 
-I normally use the options\cr
-   \code{options(latexcmd="pdflatex")}\cr
-   \code{options(dviExtension="pdf")}\cr
-on Macintosh, on Windows, on Linux.
+Please see \code{\link{latexSetOptions}} for details on the recommended
+settings
+for use with the \pkg{microplot} package.  See the "System options"
+section in the "Details" section of
+\code{\link[Hmisc]{latex}} for discussion of the options themselves.
 
-The \code{"xdvicmd"} option is dependent on details of the operating system.
-The goal is to name the function that opens \code{pdf} files.
-In order to open \code{pdf} files, the \code{"xdvicmd"} option must be specified.
-On systems I have used, this works\cr
-\preformatted{
-if (nchar(Sys.which("open"))) {
-  options(xdvicmd="open")      ## Macintosh, Windows, SMP linux
-} else {
-  options(xdvicmd="xdg-open")  ## ubuntu linux
-}
-}
-For anything else, you might need to experiment.
-
-Should you prefer to use the operating system \code{latex} command to
-write \code{dvi} files, then leave the first two options unspecified.
-You might need to change the \code{"xdvicmd"}.  See \code{\link[Hmisc]{latex}}
-for guidance.  Also you will need to modify the examples to specify a
-different 'R' device function instead of the \code{pdf} function used
-here.
-
-The examples in this \code{DESCRIPTION} file are inside \code{dontrun} environments
+The examples in this \code{help} file are inside \code{dontrun} environments
 because they depend on \code{options} and they write files.  You must set the
 \code{options} for your system before running the example manually.
 
-Most of the examples are shown using the \code{Hmisc::latex} function
+Most of the 'LaTeX' examples are shown using the \code{Hmisc::latex} function
 \code{\link[Hmisc]{latex}}
 (I am coauthor of that function).
 The \pkg{microplot} package also works with the \code{xtable::xtable}
 function \code{\link[xtable]{xtable}}.
-The last example in this help file shows a simple use of \code{xtable}
+An example in the \code{demo} directory shows a simple use of \code{xtable}.
 
-The demos in the demo directory are not inside a \code{dontrun}
+The demos in the \code{demo} directory are not inside a \code{dontrun}
 environment.  You must set the options for your system before running
-them.  I recommend that you run them manually, not automatically.  You
+them.  Each demo sets the options for \code{pdfltex}.  Should you prefer
+\code{latex} you will need to run the demos manually.
+I recommend that you run the demos with \code{ask=TRUE} because
 will need to read them closely to see what they are doing.
 
-To run the demos automatically, use\cr
-   \code{demo("bwplot-lattice",     package="microplot", ask=FALSE)}\cr
-   \code{demo("boxplot-ggplot",     package="microplot", ask=FALSE)}\cr
-   \code{demo("iris",               package="microplot", ask=FALSE)}\cr
-   \code{demo("NTplot",             package="microplot", ask=FALSE)}\cr
-   \code{demo("timeseries",         package="microplot", ask=FALSE)}\cr
-   \code{demo("AEdotplot-latex",    package="microplot", ask=FALSE)}\cr
-   \code{demo("latex",              package="microplot", ask=FALSE)}\cr
-   \code{demo("LegendrePolynomials", package="microplot", ask=FALSE)}\cr
+To run the demos manually (with a stop at each graph), use
+\preformatted{
+     demo("HowToUseMicroplot"         , package="microplot", ask=TRUE)
+     demo("latex"                     , package="microplot", ask=TRUE)
+     demo("latex-ggplot"              , package="microplot", ask=TRUE)
+     demo("msWord"                    , package="microplot", ask=TRUE)
+     demo("LegendrePolynomials"       , package="microplot", ask=TRUE)
+     demo("timeseries"                , package="microplot", ask=TRUE)
+     demo("NTplot"                    , package="microplot", ask=TRUE)
+     demo("bwplot-lattice"            , package="microplot", ask=TRUE)
+     demo("boxplot-ggplot"            , package="microplot", ask=TRUE)
+     demo("tablesPlusGraphicColumn"   , package="microplot", ask=TRUE)
+     demo("regrcoef"                  , package="microplot", ask=TRUE)
+     demo("iris"                      , package="microplot", ask=TRUE)
+     demo("AEdotplot"                 , package="microplot", ask=TRUE)
+     demo("xtable"                    , package="microplot", ask=TRUE)
+     demo("Examples"                  , package="microplot", ask=TRUE)
+   }
+To run the demos automatically, with no stops, use \code{ask=FALSE}.
 
 The \code{examples} directory
-\code{paste0(system.file(package="microplot"), "/examples")}
+\code{system.file(package="microplot", "examples")}
 includes complete working examples of \pkg{Sweave} (both LaTeX-style and
 Noweb-style), \pkg{knitr}, \code{emacs} \pkg{orgmode}, and
 \pkg{rmarkdown}
@@ -100,15 +110,13 @@ copied into a directory in which you have write privilege, and that
 directory must be made the current working directory with \code{setwd}.
 They will not work from the installed package directory.
 
-The example section in the \code{\link{MSWord}} help file points to four demos\cr
-  \code{demo("bwplot-lattice-MSWord",   package="microplot", ask=FALSE)} ## both "word" and "html" \cr
-  \code{demo("tablesPlusGraphicColumn", package="microplot", ask=FALSE)} ## both "word" and latex\cr
-  \code{demo("boxplot-ggplot-MSWord",   package="microplot", ask=FALSE)}\cr
-  \code{demo("AEdotplot-MSWord",        package="microplot", ask=FALSE)} ## both "word" and "html" \cr
+The 'Excel' for Windows example is in file
+\code{examples/irisExcel.xls}.  The 'VBA' code in that file shows how to
+place the individual microplots into 'Excel' cells.
 
-The 'Excel' example is in file \code{examples/irisExcel.xls}.  The 'VBA'
-code in that file shows how to place the individual microplots into
-'Excel' cells.
+See also the vignette:\cr
+\code{vignette("rmhPoster", package="microplot")}
+
 }
 \author{
 \packageAuthor{microplot}
@@ -126,216 +134,176 @@ Maintainer: \packageMaintainer{microplot}
 \keyword{ rmarkdown }
 \keyword{ org-mode }
 \keyword{ Word }
+\keyword{ utilities}
+\keyword{ lattice}
+\keyword{ ggplot}
+\keyword{ documentation }
+\keyword{ xtable }
+
 \seealso{
-\code{\link[Hmisc]{latex}}
+\code{\link[Hmisc]{latex}}, \code{\link{latex.trellis}}, \code{\link{microplot}}, \code{\link{as.includegraphics}}
+
 }
 \examples{
-\dontrun{
-
-## These are the LaTeX options I use
-options(latexcmd="pdflatex") ## Macintosh, Windows, linux
-options(dviExtension="pdf")  ## Macintosh, Windows, linux
-
-if (nchar(Sys.which("open"))) {
-  options(xdvicmd="open")      ## Macintosh, Windows, SMP linux
-} else {
-  options(xdvicmd="xdg-open")  ## ubuntu linux
-}
-
-latexCheckOptions()
-
-## See ?Hmisc::latex for discussion of these options.
-}
-
-
-## This example writes a set of pdf files and then uses the Hmisc::latex
+## This example writes a set of pdf files and then uses the latex
 ## function to display them in LaTeX.
 
 ## The graphs are constructed three times, once each with lattice,
 ## base graphics, and ggplot2.
 
 \dontrun{
-  tmp <- matrix(rnorm(20), 2, 5, byrow=TRUE,
+
+  ## 0. set options for pdflatex and pdf graphics files
+  latexSetOptions()
+
+
+  ## 1. define dataset
+  tmp <- matrix(rnorm(10), 2, 5, byrow=TRUE,
                 dimnames=list(c("A", "B"), paste0("X", 1:5)))
 
   tmp.df <- data.frame(y=as.vector(t(tmp)),
-                      group=factor(rep(row.names(tmp), each=5)))
+                       group=factor(rep(row.names(tmp), each=5)))
   tmp.df
-}
 
-  ## All three examples use the pdf device
 
-  ## lattice example
-\dontrun{
+  ## 2. lattice example for latex and msWord
 
-  tmp.lattice <- lattice::bwplot(group ~ y | group, data=tmp.df, layout=c(1,2),
-                                 as.table=TRUE,
+  tmp.lattice <- lattice::bwplot(group ~ y | " " * group, data=tmp.df, layout=c(1,2),
+                                 as.table=TRUE, xlim=c(-2.1, 1.3),
                                  scales=list(y=list(relation="free", at=NULL)))
   tmp.lattice
 
-  pdf("tmpl\%03d.pdf", onefile=FALSE, height=.5, width=2.5) ## inch
-  update(tmp.lattice, layout=c(1,1), xlab=NULL, ylab=NULL,
-         par.settings=list(layout.heights=layoutHeightsCollapse(),
-                           layout.widths=layoutWidthsCollapse(),
-                           axis.line=list(col="transparent"),
-                           strip.border=list(col="transparent")))
-  dev.off()
 
-  tmpl.graphnames <- paste0("tmpl", sprintf("\%03i", 1:2), ".pdf")
+  ## 3. using the latex.trellis method
+  latex(tmp.lattice,
+        height.panel=.3, width.panel=3, ## inches
+        x.axis=TRUE, y.axis=FALSE,
+        rowlabel="group", caption="latex.trellis of lattice graph column")
 
-  tmpl.display <-
-    data.frame(round(tmp, 2),
-               graphs=as.includegraphics(tmpl.graphnames, raise="-3.5ex"))
-               ## retains dimensions from pdf() statement
-  tmpl.display
-  tmpl.latex <- Hmisc::latex(tmpl.display)
-  tmpl.latex$style <- "graphicx"
-  tmpl.latex  ## this line requires latex in the PATH, and Hmisc to be loaded
-  ## Hmisc::print.latex(tmpl.latex) ## if Hmisc is not loaded
+  latex(tmp.lattice, dataobject=formatDF(tmp, dec=2),
+        height.panel=.3, width.panel=1.5, ## inches
+        x.axis=FALSE, y.axis=FALSE,
+        rowlabel="group", caption="latex.trellis of numeric data and lattice graph column")
 
-  tmplw.display <-
-    data.frame(round(tmp, 2),
-               graphs=as.includegraphics(tmpl.graphnames, width="1in", raise="-1.01ex"))
-  tmplw.display
-  tmplw.latex <- Hmisc::latex(tmplw.display)
-  tmplw.latex$style <- "graphicx"
-  tmplw.latex  ## this line requires latex in the PATH, and Hmisc to be loaded
-  ## Hmisc::print.latex(tmpl.latex) ## if Hmisc is not loaded
 
-  ## repeat using the latex.trellis method
-  Hmisc::latex(update(tmp.lattice,
-                      scales=list(y=list(relation="free"))),
-               raise="-2ex",
-               height=.3, width=3, ## inches
-               figPrefix="tmp", x.axis=TRUE, y.axis=FALSE)
+  ## 4. MS Word example.  Uses functions in ReporteRs package.
 
-}
+  tmplw.docx <-
+    msWord(tmp.lattice, dataobject=format(tmp, digits=2),
+           height.panel=.3, width.panel=2, ## inches
+           height.x.axis=.35, width.y.axis=.3,
+           figPrefix="tmplw",
+           y.axis=FALSE,
+           rowlabel="group", width.rowname=.6,
+           data.header="data values", width.dataobject=.6,
+           graph.header="bwplot",
+           caption="Lattice bwplot using msWord function")
+  print.default(tmplw.docx)
+  tmplw.docx  ## print method opens file
+  ## cut and paste this graph into a larger .docx file.
 
-## base graphics example
-\dontrun{
 
-  pdf("tmpb\%03d.pdf", onefile=FALSE, height=.5, width=3) ## inch
+  ## 5. ggplot2 example for latex and msWord
+
+  library(ggplot2)
+
+  tmpga.df <- cbind(tmp.df, fake="ff")
+  tmpga <-
+    ggplot(tmpga.df, aes(fake, y)) +
+    geom_boxplot(outlier.size = 2) +
+    facet_wrap(~ group, ncol=1) +
+    coord_flip() + ylim(-2, 1.1)
+  tmpga ## on interactive device
+
+
+  ## 6. using the latex.ggplot method
+
+  latex(tmpga, height.x.axis=.2, width.y.axis=.2, y.axis=FALSE)
+
+  latex(tmpga, dataobject=formatDF(tmp, dec=2),
+        height.panel=.5, height.x.axis=.2, width.y.axis=.2, y.axis=FALSE)
+
+
+  ## 7. msWord with ggplot
+
+  tmpga.docx <-
+    msWord(tmpga, dataobject=format(tmp, digits=2),
+           height.panel=.25, height.x.axis=.2, width.y.axis=.2, y.axis=FALSE,
+           rowlabel="group", width.rowname=.6,
+           data.header="data values", width.dataobject=.6,
+           graph.header="bwplot",
+           caption="ggplot2 boxplot using msWord function")
+  print.default(tmpga.docx)
+  tmpga.docx  ## print method opens file
+
+
+  detach("package:ggplot2")
+
+
+  ## 8. base graphics example
+  ## This must be done with an explicit loop because
+  ## base graphics doesn't produce a graphics object.
+
+  dir.verify("tmpb")
+  pdf("tmpb/fig\%03d.pdf", onefile=FALSE, height=.5, width=3) ## inch
   par( bty="n", xaxt="n", omd=c(0,1, 0,1), mai=c(0,0,0,0))
   boxplot(tmp["A",], horizontal=TRUE, ylim=range(tmp)) ## ylim for horizontal plot
   boxplot(tmp["B",], horizontal=TRUE, ylim=range(tmp)) ## ylim for horizontal plot
   dev.off()
 
-  tmpb.graphnames <- paste0("tmpb", sprintf("\%03i", 1:2), ".pdf")
+  tmpb.graphnames <- paste0("tmpb/fig", sprintf("\%03i", 1:2), ".pdf")
 
   tmpb.display <-
     data.frame(round(tmp, 2),
                graphs=as.includegraphics(tmpb.graphnames, height="2em", raise="-1.4ex"))
   tmpb.display
 
-  tmpb.latex <- Hmisc::latex(tmpb.display)
+  ## we are now using the latex.data.frame method in the Hmisc package
+  tmpb.latex <- latex(tmpb.display, rowlabel="group",
+                      caption="latex.default of base graphs")
   tmpb.latex$style <- "graphicx"
-  tmpb.latex  ## this line requires latex in the PATH, and Hmisc to be loaded
-  ## Hmisc::print.latex(tmpb.latex) ## if Hmisc is not loaded
+  tmpb.latex  ## this line requires latex in the PATH
 
-}
 
-\dontrun{
-## ggplot2 example, whole set constructed as a unit, then printed one panel at a time.
+  ## 9. detail for latex of lattice.  This is essentially what the
+  ## latex.trellis method does all together.
 
-  library(ggplot2)
-
-  tmpga <-
-    ggplot(tmp.df, aes(group, y)) +
-    geom_boxplot(outlier.size = 8) +
-    coord_flip() +
-    theme_collapse()
-  tmpga ## on interactive device
-
-  pdf("tmpga\%03d.pdf", onefile=FALSE, height=1, width=4) ## inch
-  for (i in 1:length(levels(tmp.df$group))) {
-    tmpga$coordinates$limits$x <- c(i, i)  ## I dislike this usage.
-          ## I want to use "+" with some ggplot2 function,
-          ## but have not figured out the right incantation.
-    print(tmpga)
-  }
+  dir.verify("tmpl") ## create a new subdirectory of the working directory
+  pdf("tmpl/fig\%03d.pdf", onefile=FALSE, height=.5, width=2.5) ## inch
+  update(tmp.lattice, layout=c(1,1), xlab="",
+         par.settings=list(layout.heights=layoutHeightsCollapse(),
+                           layout.widths=layoutWidthsCollapse(),
+                           axis.line=list(col="transparent"),
+                           strip.border=list(col="transparent")))
   dev.off()
 
-  graphnames <- paste0("tmpga", sprintf("\%03i", 1:2), ".pdf")
+  tmpl.graphnames <- paste0("tmpl/fig", sprintf("\%03i", 1:2), ".pdf")
+  names(tmpl.graphnames) <- rownames(tmp)
 
-  tmpga.display <-
+  tmpl <-
+    as.includegraphics(tmpl.graphnames)
+  ## retains dimensions from pdf() statement
+  tmpl
+  tmpl.latex <- latex(tmpl, rowlabel="group",
+                      caption="latex.default of lattice graph column")
+  tmpl.latex  ## this line requires latex in the PATH
+
+  tmplw <-
     data.frame(round(tmp, 2),
-               graphs=as.includegraphics(graphnames, height="1.5em", raise="-.7ex"))
-  tmpga.display
+               graphs=as.includegraphics(tmpl.graphnames, width="1in"))
+  ## retains aspect ratio from pdf() statement
+  tmplw
 
-  tmpga.latex <- Hmisc::latex(tmpga.display)
-  tmpga.latex$style <- "graphicx"
-  tmpga.latex  ## this line requires latex in the PATH, and Hmisc to be loaded
-  ## Hmisc::print.latex(tmpga.latex) ## if Hmisc is not loaded
+  tmplw.latex <- latex(tmplw, rowlabel="group",
+                       caption="latex.default of numeric data and lattice graph column")
+  tmplw.latex$style <- "graphicx"
+  tmplw.latex  ## this line requires latex in the PATH
 
-## ggplot2 example, constructed one panel at a time.
 
-  pdf("tmpgb\%03d.pdf", onefile=FALSE, height=1, width=4) ## inch
-  ggplot(tmp.df[1:5,], aes(group, y)) +
-    geom_boxplot(outlier.size = 8) + ylim(range(tmp.df[,1])) +
-      coord_flip() +
-        theme_collapse()
-  ggplot(tmp.df[6:10,], aes(group, y)) +
-    geom_boxplot() + ylim(range(tmp.df[,1])) +
-      coord_flip() +
-        theme_collapse()
-  dev.off()
+  ## 10. detail for latex of ggplot.
+  ## left as an exercise.  It is very similar to the detail for latex with lattice.
 
-  graphnames <- paste0("tmpgb", sprintf("\%03i", 1:2), ".pdf")
-
-  tmpgb.display <-
-    data.frame(round(tmp, 2),
-               graphs=as.includegraphics(graphnames, height="1.5em", raise="-.7ex"))
-  tmpgb.display
-
-  tmpgb.latex <- Hmisc::latex(tmpgb.display)
-  tmpgb.latex$style <- "graphicx"
-  tmpgb.latex  ## this line requires latex in the PATH, and Hmisc to be loaded
-  ## Hmisc::print.latex(tmpgb.latex) ## if Hmisc is not loaded
-
-  detach("package:ggplot2")
 }
-
-## MS Word example.  Uses functions in ReporteRs package.
-\dontrun{
-  ## uses tmp.df and tmp.lattice from above examples
-
-  tmplw.graphnames <- microplot(tmp.lattice,
-                                height=.3, width=3, ## inches
-                                device="png")
-
-  tmplw.docx <- MSWord_TablePlusGraphicColumn(
-      format(tmp, digits=2), title="bwplot",
-      rowname.header="group",
-      data.header="data values",
-      graph.header="bwplot",
-      panel.files=tmplw.graphnames,
-      axis.files=attr(tmplw.graphnames, "axis.names"),
-      height=.3, width=3,   ## inches, must be same as in microplot() call
-      FlexTableWidths=c(.7, ## inches, rownames count as a column
-                        rep(.5, 5), ## inches, for each data column
-                        3), ## inches, for graphs, must be same as width
-      rmh.borders=TRUE,
-      caption="Lattice bwplot using MSWord_TablePlusGraphicColumn function")
-
-  tmplw.docx  # file name
-  system(paste("open", tmplw.docx))  ## cut and paste this graph into a larger .docx file.
-}
-
-## xtable example
-\dontrun{
-  tmpl.display ## from lattice example above
-  tmplx.name <- "tmpldisplayxtable.tex"
-  print(xtable::xtable(tmpl.display),
-        caption.placement = "top",
-	sanitize.text.function = function(x) x,  ## xtable converts "\abc" to "$\backslash$abc"
-        file=tmplx.name)                         ## sanitize restores it back to "\abc".
-  tmpx.latex <- list(file=tmplx.name, style="graphicx")
-  class(tmpx.latex) <- "latex"
-
-  tmpx.latex  ## this line requires latex in the PATH, and Hmisc to be loaded
-  ## Hmisc::print.latex(tmpx.latex) ## if Hmisc is not loaded
-}
-
 
 ## Please see the demos for more interesting examples.
 ## demo(package="microplot")

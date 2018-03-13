@@ -48,9 +48,11 @@ layoutWidthsCollapse(...)
     For \code{layoutCollapse} any argument to
     \code{\link[lattice]{update.trellis}}.
 
-    For \code{layoutHeightsCollapse} any item name in \code{\link[lattice]{trellis.par.get}()$layout.heights}.
+    For \code{layoutHeightsCollapse} any item name in\cr
+    \code{\link[lattice]{trellis.par.get}()$layout.heights}.
 
-    For \code{layoutWidthsCollapse} any item name in \code{\link[lattice]{trellis.par.get}()$layout.widths}.
+    For \code{layoutWidthsCollapse} any item name in\cr
+    \code{\link[lattice]{trellis.par.get}()$layout.widths}.
 }
 \item{x}{Any \code{"trellis"} object.}
 \item{xlab, ylab, xlab.top, ylab.right, main, sub}{Standard \code{\link[lattice]{xyplot}} arguments.}
@@ -64,20 +66,22 @@ helpful
 to suppress margins, axes, labels, titles.
 }
 \value{
+For \code{layoutCollapse}, a \code{"trellis"} object.
+
 For \code{layoutHeightsCollapse} and \code{layoutWidthsCollapse},
 a list which may be used as input to the \code{par.settings} argument in a
 lattice call.
-For \code{layoutCollapse}, a \code{"trellis"} object.
 %%  For \code{layout.1.1.Collapse}, a \code{"trellis"} object.
 }
 \author{ Richard M. Heiberger <rmh@temple.edu> }
 \examples{
-lattice::trellis.par.get("layout.heights")
-lattice::trellis.par.get("layout.widths")
-layoutHeightsCollapse()
-layoutWidthsCollapse()
-layoutWidthsCollapse(axis.left=1)
 \dontrun{
+  lattice::trellis.par.get("layout.heights")
+  lattice::trellis.par.get("layout.widths")
+  layoutHeightsCollapse()
+  layoutWidthsCollapse()
+  layoutWidthsCollapse(axis.left=1)
+
   A <- lattice::xyplot(Sepal.Length ~ Sepal.Width | Species, data=iris)
 
   A                 ## one page with three panels

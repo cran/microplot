@@ -1,15 +1,11 @@
 ## Hmisc options for pdflatex
 ## graphics files are .pdf
 
+## This file is close to tutorial in that it displays many pdf files
+## each illustating different values of the control arguments.
+
 ## These are the LaTeX options I use
-options(latexcmd="pdflatex") ## Macintosh, Windows, linux
-options(dviExtension="pdf")  ## Macintosh, Windows, linux
-if (nchar(Sys.which("open"))) {
-  options(xdvicmd="open")      ## Macintosh, Windows, SMP linux
-} else {
-  options(xdvicmd="xdg-open")  ## ubuntu linux
-}
-latexCheckOptions()
+latexSetOptions()
 
 dd <- data.frame(rr=rep(letters[1:4], each=3*10),
                  cc=rep(LETTERS[5:7], each=10, times=4),
@@ -20,28 +16,16 @@ dd <- data.frame(rr=rep(letters[1:4], each=3*10),
 
 tt <- lattice::xyplot(y ~ x | cc * rr, data=dd,
                       group=g, pch=levels(dd$g), col=HH::likertColor(12), cex=2,
-                      xlim=c(-100, 100),
-                      ylim=c(   0, 200))
-                      ## xlab=letters[8:11],  ## not included in latex()
-                      ## ylab=LETTERS[12:14],
-                      ## xlab.top=letters[15:18],
-                      ## ylab.right=LETTERS[19:21])
-
+                      xlim=c(-130, 130),
+                      ylim=c( -18, 218),
+                      scales=list(cex=.6),
+                      key=list(text=list(levels(dd$g)),
+                               lines=list(col=HH::likertColor(12), lwd=4, size=3),
+                               columns=6, space="bottom"))
 tt
 
-
-
-if (FALSE) {
 latticeExtra::useOuterStrips(tt)
 
-update(tt, scales=list(x=list(relation="free"), y=list(relation="free")))
-
-update(tt, scales=list(x=list(relation="free")))
-
-update(tt, scales=list(y=list(relation="free")))
-
-update(tt, xlab="xlab", ylab="ylab", xlab.top="xlab.top", ylab.right="ylab.right")
-}
 
 ## latex draws the panels top left to top right then down,
 ## eventually getting to bottom right.
@@ -50,120 +34,100 @@ update(tt, xlab="xlab", ylab="ylab", xlab.top="xlab.top", ylab.right="ylab.right
 ## writes rows left to right, eventually at top right.
 ## latex.trellis reproduces the appearance of the displayed trellis plot.
 
-
-## figure out how best to handle pages, as in layout=c(4, 3, 2)
-## deeper conditionings as useOuterStripsT2L1
-## work out xlab etc
-## arbitrary nestings of rows and columns of trellis object
-## between=list(c(), c())
-
 ## test latex.trellis
-## four orientations
-## 1
+## eight orientations: start at each corner, move by rows and by columns
+## 1.   starting at lower left, by rows
 update(tt, main="tt")
-## no axis control
-Hmisc::latex(tt, caption="tt", raise="-7ex")
-## axis control
-Hmisc::latex(tt, caption="tt", raise="-7ex",
-             rowlabel="row",
-             y.axis=list(viewport="0 0 72 72", trim="25 0 15 0", width=paste0(32/72,"in"), hspace.right="-1em"),
-             x.axis=list(viewport="0 0 72 72", trim="0 25 0 23", height=paste0(24/72,"in"), raise="-3ex"))
 
-## return R matrix for further processing before manually calling latex()
-tt.r <-
-Hmisc::latex(tt, caption="tt", raise="-7ex",
-             rowlabel="row",
-             y.axis=list(viewport="0 0 72 72", trim="25 0 15 0", width=paste0(32/72,"in"), hspace.right="-1em"),
-             x.axis=list(viewport="0 0 72 72", trim="0 25 0 23", height=paste0(24/72,"in"), raise="-3ex"),
-             return.value="R")
-tt.r
+## 1.a no spacing control
+latex(tt, caption="tt")
 
-## 2
+## 1.b height and width of axes, key,
+##     these numbers come from trial and error for this graph
+latex(tt, caption="tt with key",
+      rowlabel="row",
+      height.x.axis=.34, ## inch
+      width.y.axis=.43,  ## inch
+      key=tt$legend$bottom$args$key, width.key=6,
+      key.includegraphics=list(hspace.left=".35in", scale=.8))
+
+
+
+## 1.c trim some space from the left side of the y.axis,
+##     and adjust width to compensate;
+latex(tt, caption="tt",
+      rowlabel="row",
+      height.x.axis=.34, ## inch
+      width.y.axis=.43,  ## inch -------------------------------|
+      y.axis.includegraphics= ##                                |
+        list(viewport="0 0 30 72", trim="6 0 0 0", width=paste0(.43*24/30,"in")))
+
+## 2.  as.table, starting at upper left, by rows
 update(tt, as.table=TRUE, main="tt, as.table=TRUE")
-Hmisc::latex(update(tt, as.table=TRUE), caption="tt, as.table=TRUE", raise="-7ex",
-             rowlabel="row",
-             y.axis=list(viewport="0 0 72 72", trim="25 0 15 0", width=paste0(32/72,"in"), hspace.right="-1em"),
-             x.axis=list(viewport="0 0 72 72", trim="0 25 0 23", height=paste0(24/72,"in"), raise="-3ex"))
+latex(update(tt, as.table=TRUE), caption="tt, as.table=TRUE",
+      rowlabel="row",
+      height.x.axis=.34, ## inch
+      width.y.axis=.43,  ## inch
+      y.axis.includegraphics=
+        list(viewport="0 0 30 72", trim="6 0 0 0", width=paste0(.43*24/30,"in")))
 
-## 3
+## 3. transpose, start at lower left and go up by columns
 update(t(tt), main="t(tt)")
-Hmisc::latex(t(tt), caption="t(tt)", raise="-7ex",
-             rowlabel="row",
-             y.axis=list(viewport="0 0 72 72", trim="25 0 15 0", width=paste0(32/72,"in"), hspace.right="-1em"),
-             x.axis=list(viewport="0 0 72 72", trim="0 25 0 23", height=paste0(24/72,"in"), raise="-3ex"))
+latex(t(tt), caption="t(tt)",
+      rowlabel="row",
+      height.x.axis=.34, ## inch
+      width.y.axis=.43,  ## inch
+      y.axis.includegraphics=
+        list(viewport="0 0 30 72", trim="6 0 0 0", width=paste0(.43*24/30,"in")))
 
-## 4
+## 4. transpose and as.table=TRUE, start at upper left and go down by columnsa
 update(t(tt), as.table=TRUE, main="t(tt), as.table=TRUE")
-Hmisc::latex(update(t(tt), as.table=TRUE), caption="t(tt), as.table=TRUE", raise="-7ex",
-             rowlabel="row",
-             y.axis=list(viewport="0 0 72 72", trim="25 0 15 0", width=paste0(32/72,"in"), hspace.right="-1em"),
-             x.axis=list(viewport="0 0 72 72", trim="0 25 0 23", height=paste0(24/72,"in"), raise="-3ex"))
+latex(update(t(tt), as.table=TRUE), caption="t(tt), as.table=TRUE",
+      rowlabel="row",
+      height.x.axis=.34, ## inch
+      width.y.axis=.43,  ## inch
+      y.axis.includegraphics=
+        list(viewport="0 0 30 72", trim="6 0 0 0", width=paste0(.43*24/30,"in")))
 
 
 ## lattice allows four options of orientation, all starting on the
 ## left.  To get it to start on the right, restate the lattice call with reversed columns
 
-## 5, Right to Left
+## 5. start at lower right, Right to Left by rows
 dd$ccRL <- factor(dd$cc, levels=rev(levels(dd$cc)))
 ttRL <- lattice::xyplot(y ~ x | ccRL * rr, data=dd,
-                      group=g, pch=levels(dd$g), col=HH::likertColor(12), cex=2,
-                      xlim=c(-100, 100),
-                      ylim=c(   0, 200))
+                        group=g, pch=levels(dd$g), col=HH::likertColor(12), cex=2,
+                        xlim=c(-130, 130),
+                        ylim=c( -18, 218),
+                        scales=list(cex=.6),
+                        key=list(text=list(levels(dd$g)),
+                                 lines=list(col=HH::likertColor(12), lwd=4, size=3),
+                                 columns=6, space="bottom"))
+ttRL
 
-Hmisc::latex(ttRL, caption="ttRL", raise="-7ex",
-             rowlabel="row",
-             y.axis=list(viewport="0 0 72 72", trim="25 0 15 0", width=paste0(32/72,"in"), hspace.right="-1em"),
-             x.axis=list(viewport="0 0 72 72", trim="0 25 0 23", height=paste0(24/72,"in"), raise="-3ex"))
+latex(ttRL, caption="ttRL",
+      rowlabel="row",
+      height.x.axis=.34, ## inch
+      width.y.axis=.43,  ## inch
+      y.axis.includegraphics=
+        list(viewport="0 0 30 72", trim="6 0 0 0", width=paste0(.43*24/30,"in")))
 
-## 6, 7, 8 and vector left as an exercise
-
-
-
-## 1, more height
-Hmisc::latex(t(tt), height.as="1.5in", raise="-7ex",
-             rowlabel="row")
-
-Hmisc::latex(t(tt), height.as="1.5in", raise="-7ex",  ## scaling by 1.5 needed in these three places
-             rowlabel="row",
-             y.axis=list(viewport="0 0 72 72", trim="26 0 15 0", width=paste0(1.5*31/72,"in"), hspace.right="-1em"),
-             x.axis=list(viewport="0 0 72 72", trim="0 25 0 23", height=paste0(1.5*24/72,"in"), raise="-3ex"))
-
-
-## 1, collapse
-Hmisc::latex(tt, raise="-7ex",
-             collapse=function(x) layoutCollapse(x, axis.line=list(col="green")),
-             rowlabel="row",
-             y.axis=list(viewport="0 0 72 72", trim="30 0 15 0", width=paste0(27/72,"in"), hspace.right="-1em"),
-             x.axis=list(viewport="0 0 72 72", trim="0 25 0 23", height=paste0(24/72,"in"), raise="-3ex"))
-
-## 1, rowseparator
-Hmisc::latex(tt, raise="-7ex", rowlabel="row",
-             rowseparator=TRUE)
-
-## 1, rowseparator and collapse
-Hmisc::latex(tt, raise="-7ex", rowlabel="row",
-             collapse=function(x) layoutCollapse(x, axis.line=list(col="green")),
-             rowseparator=TRUE)
+## 6, 7, 8 left as an exercise
 
 
 ## vector
 vv <- lattice::xyplot(y ~ x | interaction(cc, rr), data=dd,
-                      group=g, pch=levels(dd$g), col=HH::likertColor(12), cex=2)
+                      group=g, pch=levels(dd$g),
+                      col=HH::likertColor(12), cex=2, between=list(y=1),
+                      xlim=c(-100, 100),
+                      ylim=c(   0, 200),
+                      xlab="", ylab="",
+                      scales=list(cex=.7),
+                      as.table=TRUE)
 vv
 
-Hmisc::latex(vv)
-
-Hmisc::latex(vv, height.as=".35in", raise="-2ex")
-
-Hmisc::latex(vv, height.as=".35in", raise="-2ex", rowseparator=TRUE)
-
-Hmisc::latex(update(vv, as.table=TRUE), height.as=".35in", raise="-2ex", rowseparator=TRUE)
-
-Hmisc::latex(t(as.matrix(vv)), height.as=".35in", raise="-2ex", rowseparator=TRUE)
-
-
-## 3D not currently available
-ee <- lattice::xyplot(y ~ x | cc * rr * rra, data=dd,
-                      group=g, pch=levels(dd$g), col=HH::likertColor(12), cex=2)
-ee
-try(Hmisc::latex(ee))
+latex(vv, height.panel=.41,
+      height.x.axis=.34, ## inch
+      width.y.axis=.44,  ## inch
+      rowlabel="group",
+      vectorgraph.colname="Graph Panels")

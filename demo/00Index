@@ -1,12 +1,15 @@
-bwplot-lattice  A column of box plots, one for each row of summary data.  This demo uses lattice and HMisc::latex.
-boxplot-ggplot   A column of box plots, one for each row of summary data.  This demo uses ggplot2 and HMisc::latex.
+AEdotplot HH::AEdotplot displayed in both latex and msWord.
+LegendrePolynomials Matrix of multi-line plots with LaTeX math annotation and also with MS Word.
 NTplot      A matrix of normal and t plots, showing increase of power as the degrees of freedom goes up and as the distance  (mu_a - mu_0) increases.  This example uses HH::NTplot, lattice, and Hmisc::latex.
-iris        A matrix of boxplots for the measurements by species of the iris data.  This example uses lattice and Hmisc::latex.
-bwplot-lattice-MSWord A column of box plots, one for each row of summary data.  This demo uses lattice and ReporteRs.
-boxplot-ggplot-MSWord A column of box plots, one for each row of summary data.  This demo uses ggplot2 and ReporteRs.
-AEdotplot-latex  Display the graph produced by the HH::AEdotplot function in a LaTeX table along with numerical values from which the graph was constructed.  This example uses HH, lattice, Hmisc::latex.
-AEdotplot-MSWord Display the graph produced by the HH::AEdotplot function in an MS Word table along with numerical values from which the graph was constructed.  This example uses HH, lattice, ReporteRs.
-tablesPlusGraphicColumn Latex and MS Word tables with a single column of graphics.  The example shows a HH::likert plot.
+boxplot-ggplot   A column of box plots, one for each row of summary data.  This demo uses ggplot2, latex and MS Word.
+bwplot-lattice  A column of box plots, one for each row of summary data.  This demo uses lattice, latex and MS Word.
+iris        A matrix of boxplots for the measurements by species of the iris data.  This example uses lattice and latex.
+latex-ggplot latex of 2D and 1D ggplot objects.
 latex latex of 2D and 1D trellis objects.
+msWord MS Word of 2D and 1D trellis objects.
+tablesPlusGraphicColumn Latex and MS Word tables with a single column of graphics.  The example shows a HH::likert plot of Toxicity data.
 timeseries  Various rearrangements of a set of annual plots.  The demo illustrates arranging a vector of panels into a matrix, and control of placement of common axes in the LaTeX table containing the individual panels.
-LegendrePolynomials Matrix of multi-line plots with LaTeX math annotation.
+xtable Simple example showing the xtable::xtable function.
+regrcoef Display of regression coefficients for a series of models on the same set of independent variables.
+HowToUseMicroplot Simple to complex examples using lattice, ggplot, and base graphics, with and without a data matrix.
+Examples Index to microplot/examples/ files showing microplot with Sweave, knitr, markdown, RMarkdown, noweb, org mode, Word, Excel.

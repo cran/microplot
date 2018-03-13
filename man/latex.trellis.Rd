@@ -1,159 +1,305 @@
 \name{latex.trellis}
 \alias{latex.trellis}
+\alias{latex.ggplot}
+\alias{latex.graphicsList}
+\alias{latex.microplotMatrix}
 \alias{latex.includegraphicsMatrix}
+\alias{latex.graphicsClass}
+%% \alias{latex}
+%% \alias{dvi}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Hmisc::latex method for "trellis" objects.
+Display a table in 'latex' containing panels from \R graphs in
+its cells.
 }
 \description{
-Hmisc::latex method for "trellis" objects.
+Display a table in 'latex' containing panels from \R graphs in
+its cells.
+Hmisc::latex methods for "trellis", "ggplot", "graphicsList",
+"microplotMatrix", and "includegraphicsMatrix" objects.
 }
 \usage{
-latex.trellis(## microplot arguments
-              object=stop("trellis object is required", call. = FALSE),
-                         ## object must have class "trellis"
-              obji=NULL, ## Vector or matrix of trellis objects, with dimnames,
-                         ## normally each containing one panel.
-                         ## When obji is non-null, the axes and key will be
-                         ## taken from object.  We need object to be a trellis
-                         ## object so the latex generic will dispatch to
-                         ## latex.trellis.
-              figPrefix=Hmisc::first.word(deparse(substitute(object))),
-              device=c("pdf","postscript","png", ## other devices require
-                                                 ## a user-written function
-                       if (version$os == "mingw32") "win.metafile"),
-              height=1, width=1, ## microplot, numeric, in inches
-              collapse=layoutCollapse, ## see below for example.
-                                       ## zero out unwanted layout.heights
-                                       ## and layout.widths.
-              height.x.axis=height,
-              par.settings.x.axis=
-                list(layout.heights=list(panel=0, axis.bottom=1,
-                                         axis.xlab.padding=1, xlab=1),
-                     axis.line=list(col="black")),
-              width.y.axis=width,
-              par.settings.y.axis=
-                list(layout.widths=list(ylab=1, ylab.axis.padding=1,
-                                        axis.left=1, panel=0),
-                     axis.line=list(col="black")),
-              key=FALSE,    ## FALSE or a list of arguments defining a key
-              height.key=height, width.key=width,
-              ##
-              ## as.includegraphics arguments
-              height.as=NULL, ## character with TeX units, for example "1in"
-              width.as=NULL,  ## keeps aspect ratio
-              scale=NULL,     ## ignored if either height.as or width.as
-                              ## is specified.
-              raise=NULL,     ## argument to as.includegraphics
-              hspace.left=NULL,  ## argument to as.includegraphics
-              hspace.right=NULL, ## argument to as.includegraphics
-              wd=getwd(),     ## working directory for graphics files
-              viewport=NULL,  ## if specified, then left bottom right top (character)
-              ## used for pdf png jpeg
-              ## See MediaBox in pdf file.
-              ## Ask operating system for png or jpg file.
-              bb=NULL,   ## if specified, then left bottom right top (character)
-                         ## used for bmp tiff ps, ask operating system for values
-              trim=NULL, ## for example, "0 0 0 0" left bottom right top (character)
-              x.axis.includegraphics=TRUE, ## logical or a list of arguments
-              y.axis.includegraphics=TRUE, ## logical or a list of arguments
-              key.includegraphics=is.list(key), ## logical or a list of arguments
-              ##
-              ## latex.includegraphicsMatrix arguments,
-              ## including arguments to latex.default
-              ...)
+\method{latex}{graphicsClass}(  ## called by trellis, ggplot, graphicsList methods
+      object,
+      figPrefix=first.word(deparse(substitute(object))),
+      title=figPrefix, ## subject to lazy evaluation
+      ##
+      ## microplot arguments
+      device={
+        latexcmd <- options()$latexcmd
+        if (is.null(latexcmd))
+          latexcmd <- "latex"
+        switch(latexcmd,
+               pdflatex="pdf",
+               latex=,
+               "postscript")
+      },
+      ... ## can include arguments to
+      ## latex.graphicsClass,
+      ## microplot,
+      ## as.includegraphics,
+      ## latex.includegraphicsMatrix,
+      ## latex.default
+      )
 
-latex.includegraphicsMatrix(
-           ii, ## ii is not currently an includegraphicsMatrix object.
-           rowlabel="rowname", ## latex, column heading of row dimnames
-           title="figPrefix",  ## latex.default
-           rowseparator=FALSE,
-           return.value=c("latex","R"),
-           bottom=if (!is.null(attr(ii, "key.name")))
-                    attr(ii, "key.name"),
-           ...) ## arguments to latex.default
+\method{latex}{trellis}( ## calls latex.graphicsClass
+      object=stop("trellis object is required", call. = FALSE),
+      figPrefix=first.word(deparse(substitute(object))),
+      title=figPrefix, ## subject to lazy evaluation
+      ... ## can include arguments to
+      ## latex.graphicsClass,
+      ## microplot,
+      ## as.includegraphics,
+      ## latex.includegraphicsMatrix,
+      ## latex.default
+      )
+
+\method{latex}{ggplot}( ## calls latex.graphicsClass
+      object=stop("ggplot object is required", call. = FALSE),
+      figPrefix=first.word(deparse(substitute(object))),
+      title=figPrefix, ## subject to lazy evaluation
+      ... ## can include arguments to
+      ## latex.graphicsClass,
+      ## microplot,
+      ## as.includegraphics,
+      ## latex.includegraphicsMatrix,
+      ## latex.default
+      )
+
+\method{latex}{graphicsList}( ## calls latex.graphicsClass
+      object=stop("graphicsList object is required", call. = FALSE),
+      figPrefix=first.word(deparse(substitute(object))),
+      title=figPrefix, ## subject to lazy evaluation
+      ... ## can include arguments to
+      ## latex.graphicsClass,
+      ## microplot,
+      ## as.includegraphics,
+      ## latex.includegraphicsMatrix,
+      ## latex.default
+      )
+
+\method{latex}{includegraphicsMatrix}(
+      object,
+      dataobject, data.first=TRUE,
+      title=first.word(deparse(substitute(object))),
+      microplotMatrix=NULL,
+      arraystretch=1,     ## The normal interrow space is multiplied by arraystretch,
+      ##                     so changing it from its default value of 1 to 1.5 makes
+      ##                     the rows 1.5 times farther apart.
+      ##                     Uses the latex.default argument 'insert.top'.
+      bottom.hline.raise=NULL, ## character with latex unit, for example "-10ex"
+      ##        arraystretch interferes with bottom.hline.raise
+      ##        Pick arraystretch first.
+      bottom=if (!is.null(attr(object, "key.name")))
+               attr(object, "key.name"),
+      col.just.object=rep("c", ncol(object)),
+      col.just.dataobject=rep("r", ncol(dataobject)),
+      n.cgroup=NULL, ## generated below if cgroup is specified in ... and n.cgroup is not
+      ...) ## arguments to latex.default
+
+\method{latex}{microplotMatrix}(object,
+      title=first.word(deparse(substitute(object))),
+      ...) ## all ... arguments are forwarded to both
+                                   ## as.includegraphics and latex.includegraphicsMatrix
+
+%% latex(object, ...) ## imported from Hmisc
+
+%% dvi(object, ...)   ## imported from Hmisc
+
 }
+
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{object}{
-\code{"trellis"} object, usually a multi-panel object.
+    For \code{latex.trellis}, a \code{"trellis"} object,
+    usually a multi-panel object.
+
+    For \code{latex.ggplot}, a \code{"ggplot"} object,
+    usually a multi-panel object.
+
+    For \code{latex.graphicsList}, a \code{"graphicsList"} object,
+    usually a list of single panel graphics objects.  All items in the list
+    must be \code{trellis} objects or all must be \code{ggplot} objects.
+
+    For \code{latex.microplotMatrix}, a
+    \code{"microplotMatrix"} object, the result of calling
+    \code{microplot} on a \code{"trellis"} or
+    \code{"ggplot"} object; a matrix of LaTeX filenames,
+    possibly with \code{axis.names} or \code{lab.names} or \code{key.name}
+    attributes.
+
+    For \code{latex.includegraphicsMatrix}, a
+    \code{"includegraphicsMatrix"} object, the result of
+    calling \code{as.includegraphics} on a
+    \code{"microplotMatrix"} object; a matrix of LaTeX
+    \code{\\includegraphics} expressions, possibly with
+    \code{axis.names} or \code{lab.names} or \code{key.name} attributes.
+
+	 }
+\item{device}{Function used to construct the graphics files.  See \code{\link{microplot}}.}
+\item{dataobject}{Numeric or character matrix (or data.frame).}
+\item{data.first}{
+  Logical.  If \code{TRUE}, then output file will have \code{dataobject} columns
+first, then graphics \code{object} columns.
+If \code{FALSE}, then output file will have graphics \code{object} columns
+first, then \code{dataobject} columns.
 }
-  \item{obji}{\code{NULL}, or a
-vector or matrix of \code{"trellis"} objects, with dimnames, normally
-each containing one panel.  When \code{obji} is non-null, the axes and key will
-be taken from \code{object}.  We need \code{object} to be a \code{"trellis"} object so the
-\code{latex} generic will dispatch to \code{latex.trellis}.
+\item{figPrefix}{See \code{\link{microplot.trellis}}.
+    The 'latex' macro \code{\\includegraphics} requires that there be no
+    \code{"."} in the filename basename.  We replace all \code{"."} in
+    the \code{figPrefix} by \code{"-"}.
 }
-\item{figPrefix, device, height, width, collapse}{See \code{\link{microplot.trellis}}.}
-\item{height.x.axis, par.settings.x.axis, width.y.axis,par.settings.y.axis}{See \code{\link{microplot.trellis}}.}
-\item{key, height.key, width.key}{See \code{\link{microplot.trellis}}.}
-  \item{height.as, width.as}{
-Forwarded to \code{\link{as.includegraphics}} as \code{height} and \code{weight}.
-  }
-  \item{scale, raise, hspace.left, hspace.right, wd, viewport, bb, trim}{See \code{\link{as.includegraphics}}}
-  \item{x.axis.includegraphics, y.axis.includegraphics, key.includegraphics}{
-Forwarded to \code{\link{as.includegraphics}} as \code{x.axis},
-           \code{y.axis}, and \code{key}.
+\item{title}{Arguments to \code{Hmisc::latex}.}
+\item{microplotMatrix}{The \code{microplotMatrix} will be made an
+  attribute of the resulting \code{latex} object.}
+\item{arraystretch}{The normal interrow space is multiplied by
+  \code{arraystretch}, so changing it from its default value of 1 to 1.5
+  makes the rows 1.5 times farther apart.  Uses the \code{latex.default}
+  argument \code{insert.top}.
 }
-\item{ii}{The input to \code{latex.includegraphicsMatrix} is the result
-          of \code{as.includegraphics} call; a matrix of
-           LaTeX \code{\\includegraphics} statements, possibly with
-           \code{axis.names} or \code{keyname} attributes.}
-\item{title, rowlabel}{Arguments to \code{Hmisc::latex}.}
-\item{rowseparator}{
-logical.  If \code{TRUE}, then place a blank line between rows.
+\item{bottom.hline.raise}{Character string with latex unit, for example
+  \code{"-10ex"}.  \code{arraystretch} interacts with \code{bottom.hline.raise}. Pick
+  \code{arraystretch} first.
 }
-\item{return.value}{The default \code{"latex"} sends \code{ii} to
-           \code{Hmisc::latex} for processing by the operationg system
-           latex.  The alternate \code{"R"} returns the \code{ii} matrix
-           for further processing, for example to \code{rbind} a
-           numerical table before sending the result to
-           \code{Hmisc::latex}.}
 \item{bottom}{default argument to \code{latex.default}'s
-           \code{insert.bottom} argument.}
+  \code{insert.bottom} argument.}
+\item{col.just.object, col.just.dataobject}{
+  Column justification.  See \code{\link{formatDF}}.
+  %% copy of \code{\link[Hmisc]{format.df}} which is now deprecated.
+  The default centers graph panel columns
+  and right justifies \code{dataobject} columns because it assumes the
+  \code{dataobject} contains formatted (hence aligned) numerical data.
+}
+\item{n.cgroup}{See \code{\link[Hmisc]{latex}}. When \code{cgroup} is
+  specified it always appears in \code{...}. \code{ncgroup} is an
+  optional input here because we have enough information to generate it.}
   \item{\dots}{
-Further arguments to \code{latex.default}.
+    Arguments to \code{microplot.trellis}, \code{microplot.ggplot},
+                    \code{as.includegraphics}, \code{latex.includegraphicsMatrix},
+                    \code{latex.default}.
 }
 }
 \value{
-The default value of \code{latex.trellis}, when
-\code{return.value="latex"}, is a \code{"latex"} object containing two
-components. The \code{file} component contains the pathname of the
-generated \code{.tex} file.  The \code{style} component contains the
-value \code{graphicx} indicating that the latex
-\code{\\usepackage{graphicx}} is required.  See the demo in
-\code{demo/latex.r} for an elaborate example, almost a tutorial.
-
+The value of these \code{latex} methods is a \code{"latex"} object
+containing two components.
 \item{file}{Pathname of the generated \code{.tex} file.}
-\item{style}{\code{"graphicx"}}
+\item{style}{\code{"graphicx"},
+indicating that the \code{latex} \code{\\usepackage{graphicx}} is required}
+See \code{demo/HowToUseMicroplot.r} for a tutorial.  See the demos in
+\code{demo/latex.r} and \code{demo/latex-ggplot.r} for an elaborate
+example.
 
-When \code{return.value="latex"} and argument \code{file=""}, the
+When one of the \code{...} arguments is \code{file=""}, the
 generated LaTeX code is printed to standard output.  See the discussion
 of the \code{file} argument in \code{\link[Hmisc]{latex}} to learn how
 to use this feature with Sweave.
 
-The alternate value of \code{latex.trellis} when \code{return.value="R"}
-is a matrix of \code{\\includegraphics{}} statements that may be
-combined with other matrices and then sent to \code{latex.default}.  See
-the last example in \code{demo/bwplot-lattice.r}.
-
 Function \code{latex.includegraphicsMatrix} takes the output of
-\code{as.includegraphics} as its input \code{ii} and returns a
-\code{"latex"} object.  If there are \code{axis.names} attributes, they
-are placed in front of each row of panels and beneath each column of
-panels.  If there is a \code{keyname} attribute, then it is forwarded to
+\code{as.includegraphics} as its input and returns a
+\code{"latex"} object.  If there is a \code{key.name} attribute, then it is forwarded to
 \code{latex.default} as the \code{insert.bottom} argument.
+The result has an attribute \code{"includegraphicsMatrix"}
+containing its argument \code{object} and an attribute
+\code{"microplotMatrix"} containing the \code{"microplotMatrix"} object
+from which the \code{"includegraphicsMatrix"} was constructed.
+
+Function \code{latex.microplotMatrix} takes the output of
+\code{microplot} as its input and forwards it to
+\code{latex.includegraphicsMatrix}.
+All \code{...} arguments are forwarded to
+\code{latex.includegraphicsMatrix}.  The return value is a
+\code{"latex"} object.
+
+Functions \code{latex.trellis} and \code{latex.ggplot} and
+\code{latex.graphicsList}
+take their input and forward it through \code{latex.graphicsClass} to
+\code{microplot}
+and then to \code{latex.microplotMatrix}.
+
+The print method for \code{"latex"} objects, described in
+\code{\link[Hmisc:latex]{dvi}},
+is to display the latexed file on the screen at 5.5in wide by 7in tall.
+The dimensions can be changed by an explicit call to the the \code{dvi} method with other
+dimensions, for example\cr
+\code{dvi(latex(MyTrellisObject), height.panel=11, width.panel=8.5)}\cr
+See an example in \code{demo("latex", package="microplot", ask=TRUE)}
+
+The format of the screen display depends on three options described in
+\code{\link{latexSetOptions}} and \code{\link[Hmisc]{latex}}.
+
+For \code{pdflatex} normally use:\cr
+\code{latexSetOptions("pdflatex")}
+
+For \code{latex} normally use:\cr
+latexSetOptions("latex")
+
+}
+
+\details{
+  The explicit result is a \code{"latex"} object containing the name of a
+  generated \code{.tex} file in the current directory.  The file
+  contains a latex \code{\\tabular} environment holding a
+  \code{\\table}.  The cells of the \code{\\table} contain each of the
+  filenames wrapped in an \code{\\includegraphics} expression.  To get
+  the name of the created file, you must save the returned value from
+  the \code{"latex"} function and display it with \code{print.default}.
+
+  The \code{print} method for \code{"latex"} objects wraps the generated
+  file in a minimal complete \code{latex} file, runs that file through
+  the system \code{pdflatex} or \code{latex} (depending on the value of
+  \code{options("latexcmd")}) to create a \code{pdf} file (or \code{dvi} file,
+  depending on the value of \code{options("dviExtension")}), and
+  displays it on the screen.  To get the name of the displayed file, you
+  must explicitly use the \code{dvi} function on the \code{"latex"}
+  object and save the otherwise invisible return value.  If it is a
+  \code{pdf} file it can be included with an \code{\\includegraphics}
+  expression into another \code{.tex} file for use with \code{pdflatex}.
+  If it is a \code{dvi} file it can be converted with \code{dvips} to a
+  \code{.ps} file and included with an \code{\\includegraphics}
+  expression into another \code{.tex} file for use with \code{latex}.
 
 }
 
 \author{ Richard M. Heiberger <rmh@temple.edu> }
 
 \seealso{
-\code{\link[Hmisc]{latex}}
+\code{\link[Hmisc]{latex}}, \code{\link{microplot}}, \code{\link{as.includegraphics}}
 }
 \examples{
 ## See the examples in the help files, the demo files, and in the
 ## examples subdirectory.
+
+## The example here shows how to locate the generated .tex file and the displayed .pdf file.
+## The .tex file can be brought into a larger .tex file with an \include statement.
+## The .pdf file can be brought into a larger .tex file with an \includegraphics statement.
+
+\dontrun{
+## These are the settings for my machines
+## Set options for Hmisc::latex
+latexSetOptions()
+
+mpgGraph <- lattice::xyplot(mpg ~ wt, group=factor(cyl), data=mtcars,
+                            xlim=c(.8, 6.2), ylim=c(9,37),
+                            pch=as.character(levels(factor(mtcars$cyl))), cex=2)
+mpgGraph ## on your interactive device
+mpgLatex <-
+  latex(mpgGraph,
+        height.panel=2, width.panel=3, ## inch. pick numbers that look right to you.
+        height.x.axis=.37, width.y.axis=.44,  ## inch. these require trial and error.
+        height.xlab=.18, width.ylab=.27,      ## inch. these require trial and error.
+        rowname=NULL,    ## suppress rownames, see ?latex
+        colheads=FALSE)  ## suppress colnames, see ?latex
+print.default(mpgLatex)  ## file is in your working directory
+mpgPdf <- dvi(mpgLatex)
+print.default(mpgPdf) ## File is in a temporary directory.
+                      ## If Macintosh shows "//", replace by "/" before using.
+mpgPdf
+
+}
+## Sweave users can bring the generated files directly into their
+## document.  See the discussion of the \code{file} argument in
+## \code{\link[Hmisc]{latex}} to learn how to use this feature with
+## Sweave.
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

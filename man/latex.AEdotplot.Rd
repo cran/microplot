@@ -1,8 +1,10 @@
 \name{latex.AEdotplot}
 \alias{latex.AEdotplot}
-\alias{MSWord.AEdotplot}
+\alias{msWord.AEdotplot}
+\alias{microplot.AEdotplot}
 \title{
 Display the AE (Adverse Events) dotplot of incidence and relative risk
+from the HH package
 in a 'LaTeX' tabular environment or in an 'MS Word' or an 'HTML' table.
 }
 \description{
@@ -13,18 +15,27 @@ in a 'LaTeX' tabular environment or in an 'MS Word' or an 'HTML' table.
   incidence panel and the relative risk panel from the
   \code{AEdotplot} and places them in a 'LaTeX' tabular environment
   along with the numerical table of counts, percents, and relative risks.
-  The \code{\link{MSWord}} method takes the
+  The \code{\link{msWord}} method takes the
   incidence panel and the relative risk panel from the
   \code{AEdotplot} and places them in an 'MS Word' table
   along with the numerical table of counts, percents, and relative risks.
 }
 \usage{
-\method{latex}{AEdotplot}(object, figPrefix = Hmisc::first.word(substitute(object)),
+\method{latex}{AEdotplot}(object, figPrefix = first.word(deparse(substitute(object))),
+      rowlabel="Most Frequent On-Therapy Adverse Events",
       device="pdf", ...)
 
-\method{MSWord}{AEdotplot}(object, filetype="docx", figPrefix = Hmisc::first.word(substitute(object)),
-       device="png", ...)
+\method{msWord}{AEdotplot}(object, figPrefix = first.word(deparse(substitute(object))),
+       device="png",
+       height.panel=.25, height.x.axis=.45,
+       width.left=2, width.right=1.5,
+       height.key=height.panel,
+       width.dataobject=.7,
+       rowlabel="Adverse Event", width.rowname=2,
+       ...)
 
+\method{microplot}{AEdotplot}(object, figPrefix, width.left=2, width.right=1.5,
+          height.panel=.2, height.x.axis=.45, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -32,59 +43,67 @@ in a 'LaTeX' tabular environment or in an 'MS Word' or an 'HTML' table.
 An \code{"AEdotplot"} object as constructed by the \code{\link[HH:ae.dotplot7a]{AEdotplot}}.
 }
   \item{figPrefix}{
-Beginning characters for names of the sequence of generated graphics files.
+Beginning characters for names of the sequence of generated graphics
+files.
+    The 'latex' macro \code{\\includegraphics} requires that there be no
+    \code{"."} in the filename basename.  We replace all \code{"."} in
+    the \code{figPrefix} by \code{"-"}.
 }
 \item{device}{
 Forwarded to \code{microplot}.
 }
-\item{filetype}{
-Forwarded to \code{MSWord}.
-}
+\item{width.left, width.right}{\code{width.left} is
+  \code{width.panel} for the Percent column and \code{width.right} is the
+  \code{width.panel} for the Relative Risk column of the
+  \code{AEdotplot}.  See  \code{\link[HH:ae.dotplot7a]{AEdotplot}} and \link{microplot}.}
+\item{height.panel, height.x.axis, height.key}{See
+  \code{\link{microplot}}.}
+\item{width.dataobject, width.rowname}{See \code{\link{msWord}}.}
+\item{rowlabel}{See \code{\link{latex.trellis}} or \code{\link{msWord}}.}
 \item{\dots}{
-Additional arguments forwarded to the \code{\link[Hmisc]{latex}}
-function (which will use them) or to the\cr
-\code{\link{MSWord.AEdotplot.microplot}} function (which will ignore them).
+Additional arguments to \code{microplot.AEdotplot} are forwarded to the
+\code{microplot.trellis} method.  Additional arguments to
+\code{latex.AEdotplot} are forwarded to \code{microplot.AEdotplot} and to
+\code{\link{latex}}.
+Additional arguments to \code{\link{msWord.AEdotplot}} are forwarded to \code{microplot.AEdotplot} and to
+\code{\link{msWord}}.
 }
 }
 \value{
-For \code{latex.AEdotplot}, the \code{"latex"} object giving the pathname of the \code{.tex} file containing
+For \code{latex.AEdotplot}, the \code{"latex"} object giving the
+pathname of the \code{.tex} file containing
 the 'LaTeX' tabular environment constructed by the \code{\link[Hmisc]{latex}} function.
-For \code{MSWord.AEdotplot}, the \code{"character"} object giving the
+For \code{msWord.AEdotplot}, the  \code{"msWordFilename"} object giving the
 pathname of the \code{.docx} file containing
-the generated table constructed by by \code{MSWord.AEdotplot.microplot}
-function which in turn uses functions in the \pkg{\link{ReporteRs}} package.
-}
+the generated table constructed by the \code{\link{msWord.microplotMatrix}}
+functionm which in turn uses functions in the \pkg{\link{ReporteRs}}
+package.
+
+The \code{microplot.AEdotplot} method returns a list containing the
+\code{"microplotMatrix"} and the data.frame.
+	}
 \details{
 The \code{\link{microplot.AEdotplot}} function does most of the work, taking apart the
-\code{"AEdotplot"} object and constructing the set of graphics files and
-returning the data.frame containing the tabled data and the set of
-graphics files.
-The data.frame is sent to either
- \code{\link[Hmisc]{latex}} or to \code{\link{MSWord.AEdotplot.microplot}}.
-For more detail see \code{\link{microplot.AEdotplot}}.
+\code{"AEdotplot"} object and constructing  from it the set of graphics files
+identified in a \code{"microplotMatrix"} object and collecting the
+numerical data into a data.frame.  The \code{"microplotMatrix"} and the
+          data.frame are returned.
+
+The \code{\link[Hmisc]{latex}} and \code{\link{msWord}} methods call the
+\code{microplot} method
+and then the \code{latex} or \code{msWord} generic.
+The \code{msWord} method has more arguments than the \code{latex}
+method because it doesn't pick up
+the height and width dimensions from the graphics (\code{.png}) files.
 }
 \author{ Richard M. Heiberger <rmh@temple.edu> }
 \seealso{
 See \code{\link[HH:ae.dotplot7a]{AEdotplot}} and \code{\link[Hmisc]{latex}} for
 details on the operation of the \code{latex} method.\cr
-See \code{\link{microplot.AEdotplot}} for details on how the
-\code{\link{microplot}}
-function works with the \code{"AEdotplot"} object.
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
-
-\dontrun{
-## The function is currently defined as
-function (object, figPrefix = Hmisc::first.word(substitute(object)),
-    ...)
-{
-    Hmisc::latex(microplot(object, figPrefix = figPrefix, target = "latex",
-        ...))
-  }
-}
+## See
+## demo("AEdotplot", package="microplot", ask=TRUE)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

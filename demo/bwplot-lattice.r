@@ -1,24 +1,7 @@
 ## These are the settings for my machines
 ## Set options for Hmisc::latex
-options(latexcmd='pdflatex')
-options(dviExtension='pdf')
-if (nchar(Sys.which("open"))) {
-  options(xdvicmd="open")      ## Macintosh, Windows, SMP linux
-} else {
-  options(xdvicmd="xdg-open")  ## ubuntu linux
-}
-latexCheckOptions()
+latexSetOptions()
 
-
-## This demo writes a set of pdf files and then uses the Hmisc::latex
-## function to call LaTeX.
-
-## This example uses lattice graphics.
-## See the file bwplot.ggplot.r for a similar example with ggplot2 graphics.
-## See ?microplot for simple examples with lattice graphics, base graphics, and ggplot2 graphics.
-
-
-## I recommend demo("bwplot.lattice", package="microplot", ask=FALSE)
 
 ## This example is based on the example in Figure 13.2, page 431 of
 ## the Second Edition of Statistical Analysis and Data Display,
@@ -29,67 +12,79 @@ latexCheckOptions()
 ## alignment.  The version here uses the LaTeX tabular environment for
 ## alignment.
 
-
-## This example is completely reproducible without looking at the
-## script in the HH package.
-##
-## This example starts with a minimal script based on chunks 1, 2, 4, 6
 data(cc176, package="HH")
 data(col3x2, package="HH")
-cc176.aov <- aov(wt.d ~ rep + wt.n + n.treats*minutes*current,
-                 data=cc176)
+data(cc176.y.adj, package="microplot")  ## cc176.y.adj, cc176fivenumsd ## see ?cc176.y.adj
 
-cc176$y.adj <- cc176$wt.d  -
-  (cc176$wt.n - mean(cc176$wt.n))*coef(cc176.aov)["wt.n"]
 
-tmp <-
-sapply(split(cc176$y.adj, cc176$current),
-       function(x)
-         c(min=min(x),
-           "m-sd"=mean(x)-sd(x),
-           mean=mean(x),
-           "m+sd"=mean(x)+sd(x),
-           max=max(x)))
-
-t(tmp)[4:1,]
-## end of minimal script
-
-## the next section is the new material using the microplot package.
-##
+## 1. lattice.  produce plot, conditioned on current to get one box per panel
 BW <-
-lattice::bwplot(HH::unpositioned(current) ~ y.adj | current, data=cc176,
-       panel=HH::panel.bwplot.intermediate.hh,
-       strip=FALSE, layout=c(1,4), scales=list(y=list(relation="free")))
+  lattice::bwplot(HH::unpositioned(current) ~ cc176.y.adj | current, data=cc176,
+                  xlab="", col=col3x2,
+                  panel=HH::panel.bwplot.intermediate.hh,
+                  strip=FALSE, layout=c(1,4), scales=list(y=list(relation="free")))
 BW
 
-graphnames <- microplot(BW, height=.3, width=2)
 
-graphicsnames <- as.includegraphics(graphnames, raise="-.8em")
+## latex
+latex(BW, y.axis=FALSE)
 
-treatment <-
-data.frame(rbind(format(t(tmp)[4:1,], digits=4), " "=""),
-           bwplot=c(graphicsnames, attr(graphicsnames,"axis.names")["x"]),
-           check.names=FALSE)
-treatment
+latex(BW, y.axis=FALSE, height.panel=.25, width.panel=2, height.x.axis=.47,
+      rowlabel="Current", vectorgraph.colname="Boxplots")
+
+latex(BW, dataobject=formatDF(cc176fivenumsd[4:1,], dec=2), y.axis=FALSE,
+      height.panel=.25, width.panel=2, height.x.axis=.47,
+      rowlabel="Current", vectorgraph.colname="Boxplots")
+
 
 ## Without a displayed x-axis
-cc176.latex <- Hmisc::latex(treatment[1:4,], rowlabel="Treatment")
-cc176.latex$style <- "graphicx"
-cc176.latex  ## this line requires latex in the path
-
-## With a displayed x-axis
-cc176x.latex <- Hmisc::latex(treatment, rowlabel="Treatment")
-cc176x.latex$style <- "graphicx"
-cc176x.latex  ## this line requires latex in the PATH
+latex(BW, dataobject=formatDF(cc176fivenumsd[4:1,], dec=2), y.axis=FALSE,
+      height.panel=.25, width.panel=2, height.x.axis=.47,
+      rowlabel="Current", vectorgraph.colname="Boxplots",
+      x.axis=FALSE)
 
 
-## using latex.trellis
-Hmisc::latex(BW, height=.25, width=1.5, raise="-1.8ex", x.axis=TRUE, y.axis=FALSE)
 
-Hmisc::latex(update(BW, as.table=TRUE), height=.25, width=1.5, raise="-1.8ex", x.axis=TRUE, y.axis=FALSE)
+## Word
 
-## capture intermediate from latex.trellis, and join with numbers
-boxes <- Hmisc::latex(BW, height=.25, width=1.5, raise="-1.8ex", x.axis=TRUE, y.axis=FALSE, return="R")
-together <- Hmisc::latex(cbind( rbind(format(t(tmp)[4:1,], digits=4), ""), boxes))
-together$style <- "graphicx"
-together  ## this line requires latex in the PATH
+
+## with x axis
+bwplot1.docx <- msWord(BW, height.panel=.3, width.panel=2, y.axis=FALSE, title="BW1",
+                       rowlabel="Current", width.rowname=1, vectorgraph.colname="Box Plots")
+bwplot1.docx
+
+bwplot2.docx <- msWord(BW, height.panel=.3, width.panel=2, y.axis=FALSE, title="BW2",
+                       rowlabel="Current", width.rowname=1, vectorgraph.colname="Box Plots",
+                       dataobject=format(cc176fivenumsd[4:1,], digits=4), width.dataobject=.6)
+bwplot2.docx
+
+
+## without x axis
+bwplot3.docx <- msWord(BW, height.panel=.3, width.panel=2, y.axis=FALSE, title="BW3",
+                       rowlabel="Current", width.rowname=1, vectorgraph.colname="Box Plots",
+                       x.axis=FALSE)
+bwplot3.docx
+
+bwplot4.docx <- msWord(BW, height.panel=.3, width.panel=2, y.axis=FALSE, title="BW4",
+                       rowlabel="Current", width.rowname=1, vectorgraph.colname="Box Plots",
+                       dataobject=format(cc176fivenumsd[4:1,], digits=4), width.dataobject=.6,
+                       x.axis=FALSE)
+bwplot4.docx
+
+
+
+
+## With explicit call to microplot
+
+graphicsnames.png <-
+  microplot(BW, height.panel=.3, width.panel=2, device="png", vectorgraph.colname="Box Plots")
+
+latex(
+  as.includegraphics(
+    microplotAttrDisplay(graphicsnames.png, y.axis=FALSE),
+    width.includegraphics="2in"), ## needed with "png".
+  rowlabel="Current")
+
+msWord(graphicsnames.png, y.axis=FALSE, title="BW5",
+       height.panel=.3, width.panel=2,  ## must be same as in microplot() call.
+       width.rowname=1, rowlabel="Current")

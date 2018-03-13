@@ -1,25 +1,7 @@
 ## These are the settings for my machines
 ## Set options for Hmisc::latex
-options(latexcmd='pdflatex')
-options(dviExtension='pdf')
-if (nchar(Sys.which("open"))) {
-  options(xdvicmd="open")      ## Macintosh, Windows, SMP linux
-} else {
-  options(xdvicmd="xdg-open")  ## ubuntu linux
-}
-latexCheckOptions()
+latexSetOptions()
 
-
-library(ggplot2)
-
-## This demo writes a set of pdf files and then uses the Hmisc::latex
-## function to call LaTeX.
-
-## This example uses ggplot2 graphics.
-## See the file bwplot.lattice.r for a similar example with lattice graphics.
-## See ?microplot for simple examples with lattice graphics, base graphics, and ggplot2 graphics.
-
-## I recommend demo("boxplot.ggplot", package="microplot", ask=FALSE)
 
 ## This example is based on the example in Figure 13.2, page 431 of
 ## the Second Edition of Statistical Analysis and Data Display,
@@ -30,63 +12,46 @@ library(ggplot2)
 ## alignment.  The version here uses the LaTeX tabular environment for
 ## alignment.
 
-
-## This example is completely reproducible without looking at the
-## script in the HH package.
-##
-## This example starts with a minimal script based on chunks 1, 2, 4, 6
 data(cc176, package="HH")
-cc176.aov <- aov(wt.d ~ rep + wt.n + n.treats*minutes*current,
-                 data=cc176)
+data(col3x2, package="HH")
+data(cc176.y.adj, package="microplot")  ## cc176.y.adj, cc176fivenumsd ## see ?cc176.y.adj
 
-cc176$y.adj <- cc176$wt.d  -
-  (cc176$wt.n - mean(cc176$wt.n))*coef(cc176.aov)["wt.n"]
+library(ggplot2)
 
-tmp <-
-sapply(split(cc176$y.adj, cc176$current),
-       function(x)
-         c(min=min(x),
-           "m-sd"=mean(x)-sd(x),
-           mean=mean(x),
-           "m+sd"=mean(x)+sd(x),
-           max=max(x)))
+cc176.current <- cbind(cc176, y.adj=cc176.y.adj, fake="ff")
 
-t(tmp)[4:1,]
-## end of minimal script
-
-
-## the next section is the new material using the microplot package.
-
-## make single plot with all features
-BW <- ggplot(cc176, aes(current, y.adj)) +
-  geom_boxplot(color = "darkblue", outlier.shape = 1, outlier.size = 2, size = 0.4) +
+BW <-
+  ggplot(cc176.current, aes(fake, y.adj)) +
+  geom_boxplot(color = col3x2[1:4]) +
+  facet_wrap(~ current, ncol=1, as.table=FALSE) +
   coord_flip()
-BW  ## on interactive device
+BW
 
-## remove background, labels, margins
-BW+theme_collapse() ## on interactive device
+latex(BW, height.panel=.2, width.panel=2, height.x.axis=.2,
+      rowlabel="Current", vectorgraph.colname="Boxplots", y.axis=FALSE)
 
-## I really want microplot() here.  I am not familiar enough with ggplot to write that function myself.
-## microplot_yfactor.ggplot is designed for this special case of a factor on the y-axis.
-graphnames <- microplot_yfactor(BW, height=.2, width=2, n=length(levels(cc176$current))) ## inches  ## latex, pdf
-
-graphicsnames <- as.includegraphics(graphnames, raise="-.6em")
-
-treatment <-
-data.frame(rbind(format(t(tmp), digits=4), ""),
-           boxplot=c(graphicsnames, attr(graphicsnames,"axis.names")["x"]),
-           check.names=FALSE)[c(4:1, 5),]
-treatment
-
-## Without a displayed x-axis
-cc176.latex <- Hmisc::latex(treatment[1:4,], rowlabel="Treatment")
-cc176.latex$style <- "graphicx"
-cc176.latex  ## this line requires latex in the path
-
-## With a displayed x-axis
-cc176x.latex <- Hmisc::latex(treatment, rowlabel="Treatment")
-cc176x.latex$style <- "graphicx"
-cc176x.latex  ## this line requires latex in the PATH
+latex(BW, height.panel=.2, width.panel=2, height.x.axis=.2,
+      rowlabel="Current", vectorgraph.colname="Boxplots", y.axis=FALSE,
+      dataobject=formatDF(cc176fivenumsd[4:1,], dec=2))
 
 
-detach("package:ggplot2")
+## Word
+
+## graph
+msWord(BW, height.panel=.2, width.panel=2, height.x.axis=.2,
+       rowlabel="Current", width.rowname=.8,
+       vectorgraph.colname="Boxplots", y.axis=FALSE, title="Box1")
+
+## graph + data
+msWord(BW, height.panel=.2, width.panel=2, height.x.axis=.2,
+       rowlabel="Current", width.rowname=.8,
+       vectorgraph.colname="Boxplots", y.axis=FALSE, title="Box2",
+       dataobject=format(cc176fivenumsd[4:1,], digits=4), width.dataobject=.6)
+
+## suppress x axis
+msWord(BW, height.panel=.2, width.panel=2, height.x.axis=.2,
+       rowlabel="Current", width.rowname=.8,
+       vectorgraph.colname="Boxplots", y.axis=FALSE, title="Box3",
+       x.axis=FALSE)
+
+detach("package:ggplot2") ## can't unload, imported by other packages

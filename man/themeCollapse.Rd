@@ -34,7 +34,7 @@ Set the \pkg{ggplot2} theme to remove all marginal space.
   \item{\dots}{
     Other valid arguments to \code{ggplot2::theme}.
   }
-  \item{eb}{Conventience for \code{ggplot2::element_blank()}.
+  \item{eb}{Convenience for \code{ggplot2::element_blank()}.
   }
 }
 \details{

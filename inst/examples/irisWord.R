@@ -44,7 +44,7 @@ irisBW <- bwplot( ~ value | Species * variable, data=iris.melt)
 latticeExtra::useOuterStrips(irisBW)  ## screen device
 
 ##    twelve individual boxplots without axes
-irisBW.update <- layout.1.1.Collapse(irisBW)
+irisBW.update <- layoutCollapse(irisBW)
 
 png("irisBW%03d.png", height=.25, width=1.5, units="in", res=300)  ## inch
 irisBW.update ## 12 panels
@@ -90,3 +90,5 @@ doc <- addParagraph(doc, "Table with lattice bwplot column and axis row")
 doc <- addFlexTable(doc, FTx)
 
 writeDoc(doc, file="microplot-lattice-ReporteRs-png.docx")
+
+system(paste("open", "microplot-lattice-ReporteRs-png.docx"))

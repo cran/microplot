@@ -13,7 +13,7 @@ chunk and included in this `Rmd` file.
 
 The file was run by
 `rmarkdown::render("irisRMarkdownHtml.Rmd", output_file="irisRMarkdownHtml.html")`
-
+`system(paste("open", "irisRMarkdownHtml.html"))`
 
 ```{r construct, echo=FALSE}
 library(microplot)
