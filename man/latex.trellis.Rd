@@ -100,7 +100,7 @@ Hmisc::latex methods for "trellis", "ggplot", "graphicsList",
 \method{latex}{microplotMatrix}(object,
       title=first.word(deparse(substitute(object))),
       ...) ## all ... arguments are forwarded to both
-                                   ## as.includegraphics and latex.includegraphicsMatrix
+           ## as.includegraphics and latex.includegraphicsMatrix
 
 %% latex(object, ...) ## imported from Hmisc
 

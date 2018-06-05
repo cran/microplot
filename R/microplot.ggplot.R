@@ -76,7 +76,10 @@ microplot.ggplot <-
       }
       if (!object$facet$params$as.table) RR <- rev(RR)
       names.cols <- names(object$facet$params$cols)
-      CC <- if (is.null(names.cols)) vectorgraph.colname else levels(object$data[[names.cols]])
+      CC <- if (length(names.cols)==0 || is.null(names.cols))
+              vectorgraph.colname
+            else
+              levels(object$data[[names.cols]])
     }
 
     x.axis.grobnumber <- grep("axis-b", gtobj$layout$name)[1]

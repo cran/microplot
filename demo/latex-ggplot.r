@@ -26,7 +26,8 @@ gg <- ggplot(dd, aes(x, y)) +
   scale_x_continuous(limits = c(-120, 120)) +
   scale_y_continuous(limits = c( -20, 220)) +
   theme(axis.text=element_text(size=6)) +
-  geom_point(shape=dd$ggg, col=dd$col, size=5) +
+  geom_point(aes(shape=dd$ggg), col=dd$col, size=5) +
+  scale_shape_identity() +
   facet_grid(rr ~ cc)
 gg
 
@@ -85,7 +86,8 @@ ggv <- ggplot(dd, aes(x, y)) +
   scale_x_continuous(limits = c(-120, 120)) +
   scale_y_continuous(limits = c( -20, 220)) +
   theme(axis.text=element_text(size=6)) +
-  geom_point(shape=dd$ggg, col=dd$col, size=5) +
+  geom_point(aes(shape=dd$ggg), col=dd$col, size=5) +
+  scale_shape_identity() +
   facet_grid(rr.cc ~ .)
 ggv
 

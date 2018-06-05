@@ -1,3 +1,16 @@
+Version: 1.0-39
+---------------
+
+* 2018 Jun 04
+
+* coordinate with ggplot2_2.3.0: facet_grid() now produces an empty
+  named list for unspecifed column (previously NULL).
+
+* ggplot2::geom_point() requires shape= to be inside aes().
+
+
+
+
 Version: 1.0-38
 ---------------
 
@@ -68,6 +81,8 @@ demo
   letters) can't easily be used on Windows.
 
 * Not yet done:  Write paper for R Journal, or JCGS
+
+* CRAN: 2018-03-13
 
 
 Version: 1.0-25
