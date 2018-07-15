@@ -1,8 +1,8 @@
 Package: microplot
 Type: Package
 Title: Microplots (Sparklines) in 'LaTeX', 'Word', 'HTML', 'Excel'
-Version: 1.0-39
-Date: 2018-06-04
+Version: 1.0-40
+Date: 2018-06-14
 Author: Richard M. Heiberger, with contributions from Karen Byron and Nooreen Dabbish.
 Maintainer: Richard M. Heiberger <rmh@temple.edu>
 Description: The microplot function writes a set of R graphics files to be used as
@@ -13,7 +13,7 @@ Description: The microplot function writes a set of R graphics files to be used 
   with the operating system 'pdflatex' or 'latex' command, or by using
   one of 'Sweave', 'knitr', 'rmarkdown', or 'Emacs org-mode' as an
   intermediary.  For 'MS Word', the msWord() function uses the
-  'ReporteRs' package to construct 'Word' tables which include the
+  'flextable' package to construct 'Word' tables which include the
   graphs.  There are several distinct approaches for constructing HTML
   files.  The simplest is to use the msWord() function with argument
   filetype="html".  Alternatively, use either 'Emacs org-mode' or the
@@ -33,12 +33,12 @@ Description: The microplot function writes a set of R graphics files to be used 
   (with either filetype="docx" or filetype="html") work with all
   operating systems.  The package does not require the installation of
   'LaTeX' or 'MS Word' to be able to write '.tex' or '.docx' files.
-Imports: Hmisc (>= 4.1-1), HH, lattice, grid, ReporteRs, ggplot2,
+Imports: Hmisc (>= 4.1-1), HH, lattice, grid, flextable, ggplot2,
         htmltools, cowplot
 Suggests: reshape2, latticeExtra, xtable, markdown, rmarkdown, knitr,
         htmlTable
 License: GPL (>= 2)
 NeedsCompilation: no
-Packaged: 2018-06-05 19:17:51 UTC; rmh
+Packaged: 2018-07-15 03:14:47 UTC; rmh
 Repository: CRAN
-Date/Publication: 2018-06-05 19:47:57 UTC
+Date/Publication: 2018-07-15 04:30:17 UTC

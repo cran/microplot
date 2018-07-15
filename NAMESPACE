@@ -32,9 +32,9 @@ importFrom(lattice, draw.key)
 importFrom(HH, AEdotplot) ## as.vector.trellis
 ## (something must be imported from HH to get the NAMESPACE loaded and
 ## therefore provide access to the trellis method for as.vector)
-importFrom(ReporteRs, FlexTable, addFlexTable, addHeaderRow, addParagraph,
-  borderNone, borderProperties, cellProperties,  docx, parProperties, pot_img,
-  setFlexTableBorders, setFlexTableWidths, textProperties, writeDoc, addSection)
+## importFrom(ReporteRs, FlexTable, addFlexTable, addHeaderRow, addParagraph,
+##   borderNone, borderProperties, cellProperties,  docx, parProperties, pot_img,
+##   setFlexTableBorders, setFlexTableWidths, textProperties, writeDoc, addSection)
 importFrom(ggplot2, element_blank, element_line, element_text, xlab, ylab,
            aes, geom_line, ggplot, scale_colour_manual,
            scale_x_continuous, scale_y_continuous, theme, theme_minimal)

@@ -30,8 +30,8 @@ iris2 <- array(iris.melt$value,
                  levels(iris.melt$variable)))
 iris2.fivenum <- apply(iris2, 2:3, fivenum)
 dimnames(iris2.fivenum)[[1]] <- c("min", "Q1", "med", "Q3", "max")
-names(dimnames(iris2.fivenum.f)) <- c("fivenum", "Species", "variable")
 iris2.fivenum.f <- format(iris2.fivenum, nsmall=2)
+names(dimnames(iris2.fivenum.f)) <- c("fivenum", "Species", "variable")
 
 irisBWSv <- lattice::bwplot( ~ value | interaction(variable,
                                                    factor(Species, levels=rev(levels(Species)))),
@@ -52,7 +52,7 @@ latex(irisBWSv, dataobject=BW5num,
       n.rgroup=c(4,4,4,1),
       cgroup=c("Five Number Summary", ""),
       n.cgroup=c(5, 1),
-      caption="Five Number Summary and Box Plots, without x axis.")
+      caption="Five Number Summary and Box Plots, with x axis.")
 
 latex(irisBWSv, dataobject=BW5num,
       height.panel=.3, height.x.axis=.37, y.axis=FALSE, x.axis=FALSE,

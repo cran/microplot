@@ -1,3 +1,31 @@
+Version: 1.0-41
+---------------
+
+* 2018 Jul xx
+
+* restore msWord methods.
+  Change dependence from ReporteRs to flextable for production of
+  MS Word documents
+
+
+Version: 1.0-40
+---------------
+
+* 2018 Jul 14
+
+* The msWord methods are temporarily disabled, and replaced by a
+  warning, in microplot_1.0-40.  All other features of microplot
+  continue to work.
+
+  msWord depends on the ReporteRs package which was archived on July 16, 2018.
+  The functions in the replacement package flextable have different
+  calling sequences and I haven't worked out the details yet.
+  In the meantime, please use the older release microplot_1.0-39
+  along with the archived ReporteRs.
+
+* repair typos in demo/iris.r
+
+
 Version: 1.0-39
 ---------------
 
@@ -8,6 +36,7 @@ Version: 1.0-39
 
 * ggplot2::geom_point() requires shape= to be inside aes().
 
+* on CRAN: 2018-06-05
 
 
 
