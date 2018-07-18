@@ -50,7 +50,8 @@ dvi(
 
 #####  msWord #####
 
-AE1c.docx <- msWord(AE1c)
+AE1c.docx <- msWord(AE1c,
+                    rgroup.exclude.borders=c(34, 35))
 AE1c.docx
 
 

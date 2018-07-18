@@ -186,7 +186,7 @@ Maintainer: \packageMaintainer{microplot}
         rowlabel="group", caption="latex.trellis of numeric data and lattice graph column")
 
 
-  ## 4. MS Word example.  Uses functions in ReporteRs package.
+  ## 4. MS Word example.  Uses functions in the flextable and officer packages.
 
   tmplw.docx <-
     msWord(tmp.lattice, dataobject=format(tmp, digits=2),

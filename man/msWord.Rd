@@ -37,7 +37,6 @@ msWord(object, ...)
        axis.files=attr(object,"axis.names"),
        lab.files=attr(object,"lab.names"),
        key.file=attr(object,"key.name"),
-       key.par.properties=list(),
        x.axis=(!is.null(axis.files) && !is.null(axis.files["x"])),
        y.axis=(!is.null(axis.files) && !is.null(axis.files["y"])),
        xlab=FALSE,
@@ -64,6 +63,7 @@ msWord(object, ...)
        rgroup=NULL,
        n.rgroup=NULL,
        rgroup.exclude.borders=NULL,
+       key.align="center",  ## flextable::align
        ...)
 
 \method{msWord}{graphicsClass}( ## calls msWord.graphicsClass
@@ -116,7 +116,15 @@ msWord(object, ...)
 \code{"microplotMatrix"} (Matrix of filenames containing individual panels) (0 columns permitted).
 }
   \item{filetype}{
-File extension of generated file.
+File extension of generated file.  Character, either \code{"docx"} or
+\code{"html"}.
+For \code{filetype="docx"} the result is a variable containing the
+filename of a generated \code{MS Word} file.  See the discussion of
+\code{value}
+below for additional information on the value.
+For \code{filetype="html"} the result is a variable containing a
+\code{flextable} object.  See the discussion of \code{value} below to learn
+how to save the \code{html} file.
 }
   \item{dataobject}{
 Numeric or character matrix (or data.frame).
@@ -154,8 +162,6 @@ Directory containing files named in \code{object}.
   \item{axis.files, lab.files, key.file}{Filenames for graphics files containing
   axes, axis labels, and key (legend).
 }
-\item{key.par.properties}{\pkg{ReporteRs}\code{\link[ReporteRs]{parProperties}} for the
-  key (legend).}
 \item{x.axis, xlab}{Logical.  If \code{x.axis==TRUE} each column of
 graphs will have the \code{x.axis} file placed as the last item in that column.
 If both are \code{TRUE} then the \code{xlab} file will be placed in the row
@@ -182,8 +188,8 @@ them on second and later runs.
   \item{rmh.borders}{
 My preferences for borders on cells based on the American Statistical
 Association (\url{http://amstat.tfjournals.com/asa-style-guide/})
-style sheet.  The \pkg{ReporteRs} default, with full
-borders around all cells, does not conform.
+style sheet.  The \pkg{flextable} default, with full
+borders between rows, does not conform.
 }
   \item{caption}{
 The table will be rendered with a numbered caption containing this
@@ -217,6 +223,7 @@ Argument names borrowed from \code{\link[Hmisc]{latex}}.
 numbers of rows which are not to have a border between the rowname and
   the body of the table.
 }
+\item{key.align}{\code{flextable::align} one of \code{left}, \code{right}, \code{center}.}
 %% \item{x}{\code{print} methods require that their argument be named \code{x}.}
   \item{\dots}{
 Additional arguments are currently ignored by
@@ -226,24 +233,30 @@ They are forwarded to other methods by the other functions documented here.
 }
 \note{
 The \code{msWord} function uses facilities provided by the
-  \pkg{ReporteRs} package.
+  \pkg{flextable} and \pkg{officer} packages.
 }
 \value{
-The returned value is the name of a generated file.    The generated
-file
-is a \code{docx} file or an \code{html} file that
-contains a table with the individual panels in the graphics files
-listed in \code{object} and the data values in the input \code{dataobject}.
-The class of the file
-is either \code{"msWordFilename"} or \code{"htmlFilename"}.
-The print methods will display the generated file on screen when the
-filename is entered at the console.
-The result has an attribute \code{"microplotMatrix"} containing its
-argument \code{object}.
-The result has an
-attribute showing the actual \code{FlexTableWidths} used.  The user may
-wish to use the  \code{FlexTableWidths} argument on a following run to
-modify these values.
+  The returned value depends on the \code{filetype} argument.
+
+  For \code{filetype="docx"}, the value is the name of a generated file
+  \code{docx} file with class \code{"msWordFilename"}.  Printing the
+  returned value will display the generated file on screen.  The result
+  has an attribute \code{"microplotMatrix"} containing its argument
+  \code{object}, which contains the names of the generated microplots.
+  The result has an attribute showing the actual \code{FlexTableWidths}
+  used.  The user may wish to use the \code{FlexTableWidths} argument on
+  a following run to modify these values.
+
+
+  For \code{filetype="html"}, the value is a \code{\link{flextable}} object.
+  Printing the returned value will display the generated table in a
+  browser window.
+   If you wish to keep the html object, you MUST save it manually!
+ The original file is in a temporary directory and will vanish when R is closed.
+ Switch to the browser window and save the displayed table as a 'Web Archive'
+ in a directory of your choice.  Choose an appropriate basename for the saved file,
+ as the default basename of the file is the noninformative \code{"index"}.
+
 }
 \author{ Richard M. Heiberger <rmh@temple.edu> }
 \examples{

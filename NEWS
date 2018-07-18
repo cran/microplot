@@ -1,11 +1,15 @@
 Version: 1.0-41
 ---------------
 
-* 2018 Jul xx
+* 2018 Jul 18
 
 * restore msWord methods.
-  Change dependence from ReporteRs to flextable for production of
-  MS Word documents
+  Change dependence of msWord.microplotMatrix from ReporteRs to
+  flextable and officer for production of MS Word documents.
+
+* add new arguments to demo/tablesPlusGraphicColumn.r
+
+* adjust argument values in demo/AEdotplot.r, demo/LegendrePolynomials.r
 
 
 Version: 1.0-40
@@ -25,6 +29,8 @@ Version: 1.0-40
 
 * repair typos in demo/iris.r
 
+* CRAN: 2018-07-15
+
 
 Version: 1.0-39
 ---------------
@@ -32,7 +38,7 @@ Version: 1.0-39
 * 2018 Jun 04
 
 * coordinate with ggplot2_2.3.0: facet_grid() now produces an empty
-  named list for unspecifed column (previously NULL).
+  named list for unspecified column (previously NULL).
 
 * ggplot2::geom_point() requires shape= to be inside aes().
 

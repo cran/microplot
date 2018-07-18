@@ -62,6 +62,7 @@ latex(LL4, y.axis=FALSE, height.panel=.25, width.panel=1.8,
 Toxdf.docx <-
   msWord(LL4, height.panel=.5, width.panel=3,
          key=LL4$legend$bottom$args$key,
+         height.key=.5, width.key=3, key.align="right",
          dataobject=toxicityf, width.dataobject=.4,
          title="Toxicity2",
          rowlabel="Toxicity", width.rowname=2,
@@ -69,11 +70,34 @@ Toxdf.docx <-
          graph.header="",
          vectorgraph.colname="Counts by Grade",
          y.axis=FALSE,
-         key.par.properties=list(padding.left=295), ## pts from left margin
-         ##                                            72 pts/inch
          caption="Simulated Counts of Grade by Toxicity")
 
-print.default(Toxdf.docx)  # file name
+print.default(Toxdf.docx)  ## print.default displays the file name
 
 Toxdf.docx ## print method opens file
-## pick up this graph and paste it into a larger .docx file.
+## You may pick up this graph and paste it into a larger .docx file.
+
+
+## 4. Display as HTML table with column of graphs.
+
+Toxdf.flextable <-
+  msWord(LL4, height.panel=.5, width.panel=3,
+         key=LL4$legend$bottom$args$key,
+         height.key=.5, width.key=3, key.align="right",
+         dataobject=toxicityf, width.dataobject=.4,
+         title="Toxicity2",
+         rowlabel="Toxicity", width.rowname=2,
+         data.header="Grade",
+         graph.header="",
+         vectorgraph.colname="Counts by Grade",
+         y.axis=FALSE,
+         caption="Simulated Counts of Grade by Toxicity",
+         filetype="html")
+
+Toxdf.flextable
+## Printing the returned value will display the table in your browser.
+## If you wish to keep the html object, you MUST save it manually!
+## The original file is in a temporary directory and will vanish when R is closed.
+## Switch to the browser window and save the displayed table as a 'Web Archive'
+## in a directory of your choice.  Choose an appropriate basename for the saved file,
+## as the default basename of the file is the noninformative 'index'.

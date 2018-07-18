@@ -166,8 +166,6 @@ LG.docx <- msWord(plots,
                   xlab=TRUE,  ## R xlab and ylab
                   ylab=TRUE,
                   key=plots15$legend$top$args$key,
-                  key.par.properties=list(padding.left=130), ## pts from left margin
-                  ##                                            72 pts/inch
                   graph.header=if (w32) "beta" else "\u03b2", ## beta,
                   rowlabel=if (w32) "alpha" else "\u03b1", ## alpha
                   FlexTableWidths=c(0.450, 0.300, 0.500, 1.4, 1.4, 1.4, 1.4, 1.4))
@@ -196,8 +194,6 @@ LG2.docx <- msWord(plots,
                   label.x.axis=if (w32) "theta" else "\u03b8", ## theta ## MS Word labels for axes
                   label.y.axis="Tj",
                   key=plots15$legend$top$args$key,
-                  key.par.properties=list(padding.left=130), ## pts from left margin
-                  ##                                            72 pts/inch
                   graph.header=if (w32) "beta" else "\u03b2", ## beta,
                   rowlabel=if (w32) "alpha" else "\u03b1", ## alpha
                   FlexTableWidths=c(0.450, 0.500, 1.4, 1.4, 1.4, 1.4, 1.4))
