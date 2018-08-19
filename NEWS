@@ -1,3 +1,11 @@
+Version: 1.0-42
+---------------
+
+* 2018 Aug 18
+
+* msWord.microplotMatrix: additional checks needed before calling flextable::merge_at
+
+
 Version: 1.0-41
 ---------------
 
@@ -10,6 +18,8 @@ Version: 1.0-41
 * add new arguments to demo/tablesPlusGraphicColumn.r
 
 * adjust argument values in demo/AEdotplot.r, demo/LegendrePolynomials.r
+
+* CRAN: 2018-07-18
 
 
 Version: 1.0-40

@@ -259,11 +259,11 @@ msWord.microplotMatrix <-
       FT <- do.call(add_header, c(list(FT, top=TRUE), tmp))
       FT <- hline(FT, i=1, border=fp_border(color="transparent", width=2), part="header")
       FT <- height(FT, i=1, height=.2, part="header")
-      if (nchar(data.header)  > 0) {
+      if (nchar(data.header)  > 0 && length(column.dataobject > 0)) {
         FT <- merge_at(FT, i = 1, j = column.dataobject, part = "header")
         FT <- hline(FT, i=1, j=column.dataobject, border=fp_border(color="black", width=4), part="header") ## see below
       }
-      if (nchar(graph.header) > 0) {
+      if (nchar(graph.header) > 0 && length(column.object > 0)) {
         FT <- merge_at(FT, i = 1, j = column.object,     part = "header")
         FT <- hline(FT, i=1, j=column.object,     border=fp_border(color="black", width=4), part="header") ## see below
         ## below: I want width=1.  body_add_flextable restores this line, so width=4 emphasizes the part I care about.

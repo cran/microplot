@@ -1,6 +1,6 @@
-7a03b2416feaf4fc34f4b19870d4511f *DESCRIPTION
+a1fa9e94943e60709dbfab8bf3f9628b *DESCRIPTION
 7ccd1d5987fc21035a3ff59a4ddac300 *NAMESPACE
-a8ebc14a58a9c42f4c929856db5df2f9 *NEWS
+a1456b9bf1da6ebf330013ddc413b968 *NEWS
 0bf3a71f6f60899f9aa23e730c3502c1 *R/AEdotplotMethods.R
 e92f33b3ef06883fe296058754d9bae3 *R/RemoveDot.R
 4c92cc01ea35a4b20f8872072ef07210 *R/as.htmlimg.R
@@ -15,9 +15,9 @@ d71627fa3b66ffbd339805090e8b52c8 *R/latex.trellis.R
 e691d9a3fb6d69a95412d10c4b095931 *R/microplot.ggplot.R
 5f02eb9ffebf1a416d1e17265fa8b88e *R/microplot.trellis.R
 4ddb72c559956046e25b586c0a448cc7 *R/microplotAttrDisplay.R
-d504d9e16e5f5c967aec2f385c9d8cf2 *R/msWord.microplotMatrix.R
+65e57018b7949aa387681d351f2cdedc *R/msWord.microplotMatrix.R
 5af71e570183a5535db3585be7111b4a *R/themeCollapse.R
-5bad3ab9e79a1601164ecaf7b0664109 *build/partial.rdb
+f8a25d10c868a5020ff34fdca8bb4342 *build/partial.rdb
 5daf395af6e40ed1164acd21e140ecf9 *build/vignette.rds
 6bc3727ec10bc1ee970c63b58c7e06e9 *data/LegendrePolyMatrices.rda
 ff8baada9923ce0d7d9c1b2a9230e23f *data/cc176.y.adj.rda
@@ -40,7 +40,7 @@ c104e47bfc46380370953c7fd2418b83 *demo/timeseries.r
 5e7a11b1ec4feb2400c212129a1d5900 *demo/xtable.r
 794f24c9bef7a5c3e0f7eeeeebca570d *inst/doc/rmhPoster.R
 0a789a97044f2fcffe4b409e3091fa8a *inst/doc/rmhPoster.Rtex
-1378cc25490987f4ec614fb5cae6e0e1 *inst/doc/rmhPoster.pdf
+fbc640d70fdb1d6ee186adc10f33ddf3 *inst/doc/rmhPoster.pdf
 3b35b56ec85f6d3cb64e2454efbf2113 *inst/examples/irisExcel.xls
 d09664b8d5dbcb95614e6433f4c38516 *inst/examples/irisKnitr.Rnw
 305672c81f06f3cd6c585ce0dab46f0b *inst/examples/irisMarkdown.Rmd
