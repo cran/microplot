@@ -144,21 +144,21 @@ msWord.microplotMatrix <-
     object.rows <- 1:nrow(object)
   }
 
-    ## flextable::as_image requires a name or number as its first argument.
-    ## flextable::display requires that its formatters argument be a list of formulas.
-    ## These two requirements mean that you can't use row and column index values directly in the formula.
-    ## Instead you must create the formula by parsing the row and column index values.
-    parse.as_image <- function(left, col_key, src, width.arg, height.arg) {
-      as.formula(
-        parse(text=paste(collapse="",
-                         c(left, "~ as_image(", col_key,
-                           ", src='", src,
-                           "', width=", width.arg,
-                           ", height=", height.arg,
-                           ")")
-                         )
-              )[[1]])
-    }
+    ## ## flextable::as_image requires a name or number as its first argument.
+    ## ## flextable::display requires that its formatters argument be a list of formulas.
+    ## ## These two requirements mean that you can't use row and column index values directly in the formula.
+    ## ## Instead you must create the formula by parsing the row and column index values.
+    ## parse.as_image <- function(left, col_key, src, width.arg, height.arg) {
+    ##   as.formula(
+    ##     parse(text=paste(collapse="",
+    ##                      c(left, "~ as_image(", col_key,
+    ##                        ", src='", src,
+    ##                        "', width=", width.arg,
+    ##                        ", height=", height.arg,
+    ##                        ")")
+    ##                      )
+    ##           )[[1]])
+    ## }
 
 
     FT <- flextable(data.frame(data.with.plot))
@@ -175,52 +175,50 @@ msWord.microplotMatrix <-
       for (j in seq(along=column.object))
         if (nchar(object[i, column.object[j]+1-column.object[1]]) > 0)
           ## using parse.as_image
-          FT <- display(FT, i=object.rows[i], col_key=column.object[j], pattern="{{I}}",
-                        formatters=list(parse.as_image("I",
-                                                       col_key=column.object[j],
-                                                       src=paste0(graph.file.directory, object[i, column.object[j]+1-column.object[1]]),
-                                                       width=width.panel[j], height=height.panel[i])
+          FT <- compose(FT, i=object.rows[i], j=column.object[j],
+                        value=as_paragraph(as_image(src=paste0(graph.file.directory, object[i, column.object[j]+1-column.object[1]]),
+                                                    width=width.panel[j], height=height.panel[i])
                         ))
+## if (FALSE) {
+##           FT <- display(FT, i=object.rows[i], col_key=column.object[j], pattern="{{I}}",
+##                         formatters=list(parse.as_image("I",
+##                                                        col_key=column.object[j],
+##                                                        src=paste0(graph.file.directory, object[i, column.object[j]+1-column.object[1]]),
+##                                                        width=width.panel[j], height=height.panel[i])
+##                         ))
+## }
 
     if (y.axis) {
       if (ylab) {
         for (i in object.rows)
           if (nchar(lab.files["y"]) > 0)
-            FT <- display(FT, i=i, col_key=column.ylab, pattern="{{I}}",
-                          formatters=list(parse.as_image("I",
-                                                         col_key=column.ylab,
-                                                         src=paste0(graph.file.directory, lab.files["y"]),
-                                                         width=width.ylab, height=height.panel[i])
+            FT <- compose(FT, i=i, j=column.ylab,
+                          value=as_paragraph(as_image(src=paste0(graph.file.directory, lab.files["y"]),
+                                                      width=width.ylab, height=height.panel[i])
                                           ))
       }
       for (i in object.rows)
         if (nchar(axis.files["y"]) > 0)
-          FT <- display(FT, i=i, col_key=column.y.axis, pattern="{{I}}",
-                        formatters=list(parse.as_image("I",
-                                                       col_key=column.y.axis,
-                                                       src=paste0(graph.file.directory, axis.files["y"]),
-                                                       width=width.y.axis, height=height.panel[i])
+          FT <- compose(FT, i=i, j=column.y.axis,
+                        value=as_paragraph(as_image(src=paste0(graph.file.directory, axis.files["y"]),
+                                                    width=width.y.axis, height=height.panel[i])
                                         ))
     }
 
     if (x.axis) {
       for (j in seq(along=column.object))
         if (nchar(axis.files["x"]) > 0)
-          FT <- display(FT, i=nrow(object)+1, col_key=column.object[j], pattern="{{I}}",
-                        formatters=list(parse.as_image("I",
-                                                       col_key=column.object[j],
-                                                       src=paste0(graph.file.directory, axis.files["x"]),
-                                                       width=width.panel[j], height=height.x.axis)
+          FT <- compose(FT, i=nrow(object)+1, j=column.object[j],
+                        value=as_paragraph(as_image(src=paste0(graph.file.directory, axis.files["x"]),
+                                                    width=width.panel[j], height=height.x.axis)
                                         ))
 
       if (xlab) {
         for (j in seq(along=column.object))
           if (nchar(lab.files["x"]) > 0)
-            FT <- display(FT, i=nrow(object)+2, col_key=column.object[j], pattern="{{I}}",
-                          formatters=list(parse.as_image("I",
-                                                         col_key=column.object[j],
-                                                         src=paste0(graph.file.directory, lab.files["x"]),
-                                                         width=width.panel[j], height=height.xlab)
+            FT <- compose(FT, i=nrow(object)+2, j=column.object[j],
+                          value=as_paragraph(as_image(src=paste0(graph.file.directory, lab.files["x"]),
+                                                      width=width.panel[j], height=height.xlab)
                                           ))
       }
     }
@@ -279,11 +277,9 @@ msWord.microplotMatrix <-
       FT <- do.call(add_footer, c(list(FT), blank.column.labels))
       FT <- merge_h(FT, part="footer")
       FT <- align(FT, i=1, align=key.align, part="footer")
-      FT <- display(FT, i=1, col_key=names(column.names[1]), pattern="{{K}}",
-                    formatters=list(parse.as_image("K",
-                                                   col_key=names(column.names[1]),
-                                                   src=key.pathname,
-                                                   width=width.key, height=height.key)
+      FT <- compose(FT, i=1, j=names(column.names[1]),
+                    value=as_paragraph(as_image(src=key.pathname,
+                                                width=width.key, height=height.key)
                                     ),
                     part="footer")
       ## FT <- do.call(set_footer_labels, c(list(FT), column.names))

@@ -1,9 +1,63 @@
+Version: 1.0-44
+
+* 2020 Nov 28
+
+* msWord.microplotMatrix: flextable::display is defunct.  Replaced
+  with flextable::compose which uses different, and much simpler,
+  argument list.
+
+* dvi.latexConsole.R and show.latexConsole.Rd: Revised
+  print.OSfilename() and show.OSfilename() to use wait=FALSE as default,
+  hence the printing will be asynchronous.
+
+* NAMESPACE: importFrom more functions from flextable.
+
+* microplot.Rd: arguments to microplot.trellis needed adjusting.
+
+* cc176.y.adj.Rd: change http to https
+
+* CRAN: 2020-11-29
+
+
+Version: 1.0-43
+---------------
+
+* 2020 Jun 16
+
+* latex.graphicsClass now declared as S3 method
+
+* latex.trellis.Rd: repair typo
+
+* microplot.trellis: height.panel and width.panel can now be vectors.
+
+* microplot.trellis: {height.x.axis width.y.axis height.xlab
+  width.ylab} are taken from the upperleft panel and used for all
+  panels.  This is OK under (a) the standard situation when all panels
+  have the same height and width; (b) under the special situation when
+  all columns of panels have the same width, all panels in each row of
+  panels have the same height, and there is exactly one tick mark in
+  each row; (c) the transpose of (b); and (d) all panels in each
+  column have the same width, all panels in each row have the same
+  height, and there is exactly one tick mark in each row and column.
+
+* as.includegraphics.default: setting {height.x.axis width.y.axis
+  height.xlab width.ylab} in the list(...) to 0, now sets
+  {x.axis.includegraphics y.axis.includegraphics xlab.includegraphics
+  ylab.includegraphics} to FALSE.
+
+* microplot.trellis: setting {height.x.axis width.y.axis height.xlab
+  width.ylab} to 0 now suppresses the return of names of axis.names and
+  lab.names files.
+
+
 Version: 1.0-42
 ---------------
 
 * 2018 Aug 18
 
 * msWord.microplotMatrix: additional checks needed before calling flextable::merge_at
+
+* CRAN: 2018-08-19
 
 
 Version: 1.0-41

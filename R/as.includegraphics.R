@@ -61,6 +61,11 @@ as.includegraphics.default <-
         paste0("[", g.o, "]")
       }
 
+    hxa <- list(...)$height.x.axis; if (!is.null(hxa) && hxa==0) x.axis.includegraphics=FALSE
+    wya <- list(...)$width.y.axis ; if (!is.null(wya) && wya==0) y.axis.includegraphics=FALSE
+    hxl <- list(...)$height.xlab  ; if (!is.null(hxl) && hxl==0) xlab.includegraphics=FALSE
+    wyl <- list(...)$width.ylab   ; if (!is.null(wyl) && wyl==0) ylab.includegraphics=FALSE
+
     result <- paste0(if (!is.null(hspace.left)) paste0("\\hspace{", hspace.left, "}"),
                      "\\includegraphics",
                      graphicx.options,

@@ -111,11 +111,11 @@ function (object, width = 5.5, height = 7, ConsoleToFile=TRUE)
 }
 
 
-print.OSfilename <- function(x, ...) {
-  show.OSfilename(x)
+print.OSfilename <- function(x, wait=FALSE, ...) {
+  show.OSfilename(x, wait=wait, ...)
   invisible(x)
 }
 
-show.OSfilename <- function(x, ...) {
-  system(paste("open", x))
+show.OSfilename <- function(x, wait=FALSE, ...) {
+  system(paste("open", x), wait=wait)
 }

@@ -13,27 +13,27 @@ microplot.trellis <-
            ##                    layout.heights=list(axis.bottom=.3),
            ##                    layout.widths=list(axis.left=.3),
            ##                    axis.line=list(col="green")))
-           height.x.axis=height.panel,
+           height.x.axis=height.panel[1],
            axis.line=list(col="black"),
            xaxis.line=axis.line,
            par.settings.x.axis=
              list(layout.heights=list(panel=0, axis.bottom=1, axis.xlab.padding=0, xlab=0),
                   axis.line=xaxis.line),
-           width.y.axis=width.panel,
+           width.y.axis=width.panel[1],
            yaxis.line=axis.line,
            par.settings.y.axis=
              list(layout.widths=list(ylab=0, ylab.axis.padding=0, axis.left=1, panel=0),
                   axis.line=yaxis.line),
-           height.xlab=height.panel,
+           height.xlab=height.panel[1],
            par.settings.xlab=
              list(layout.heights=list(panel=0, axis.bottom=0, axis.xlab.padding=0, xlab=1),
                   axis.line=list(col="transparent")),
-           width.ylab=width.panel,
+           width.ylab=width.panel[1],
            par.settings.ylab=
              list(layout.widths=list(ylab=1, ylab.axis.padding=0, axis.left=0, panel=0),
                   axis.line=list(col="transparent")),
            key=FALSE,    ## FALSE or a list of arguments defining a key
-           height.key=height.panel, width.key=width.panel,
+           height.key=height.panel[1], width.key=width.panel[1],
            ...  ## needed to match generic.  ignored in the trellis method
            ) {
 
@@ -50,6 +50,10 @@ microplot.trellis <-
     obji <- collapse(as.vector(object))  ## HH:::as.vector.trellis permits index 1:n
     n <- dim(obji)
 
+    height.panel <- rep(height.panel, length=n)
+    width.panel  <- rep(width.panel,  length=n)
+
+
     is.key <- is.list(key)
 
     device <- match.arg(device)
@@ -65,24 +69,27 @@ microplot.trellis <-
     ## panels
     for (i in 1:n)
       writePanel(update(obji[i], legend=NULL),
-                 device, filenames[i], height=height.panel, width=width.panel, res=res)
+                 device, filenames[i], height=height.panel[i], width=width.panel[i], res=res)
 
     ## x axis ## n+1
+    if (height.x.axis > 0)
     writePanel(update(obji[1], legend=NULL, xlab="", par.settings=par.settings.x.axis),
-               device, filenames[n+1], height=height.x.axis, width=width.panel, res=res)
+               device, filenames[n+1], height=height.x.axis, width=width.panel[1], res=res)
 
     ## y axis ## n+2
+    if (width.y.axis > 0)
     writePanel(update(obji[1], legend=NULL, ylab="", par.settings=par.settings.y.axis),
-               device, filenames[n+2], height=height.panel, width=width.y.axis, res=res)
-
+               device, filenames[n+2], height=height.panel[1], width=width.y.axis, res=res)
 
     ## xlab ## n+3
+    if (height.xlab > 0)
     writePanel(update(obji[1], legend=NULL, xlab=object$xlab, par.settings=par.settings.xlab, scales=list(draw=FALSE)),
-               device, filenames[n+3], height=height.xlab, width=width.panel, res=res)
+               device, filenames[n+3], height=height.xlab, width=width.panel[1], res=res)
 
     ## ylab ## n+4
+    if (width.ylab > 0)
     writePanel(update(obji[1], legend=NULL, ylab=object$ylab, par.settings=par.settings.ylab, scales=list(draw=FALSE)),
-               device, filenames[n+4], height=height.panel, width=width.ylab, res=res)
+               device, filenames[n+4], height=height.panel[1], width=width.ylab, res=res)
 
     ## key ## n+5
     if (is.key) {
@@ -127,8 +134,10 @@ microplot.trellis <-
          call. = FALSE)
 
     structure(filenames.array,
-              axis.names=c(x=filenames[n+1], y=filenames[n+2]),
-              lab.names=c(x=filenames[n+3], y=filenames[n+4]),
+              axis.names= c(if (height.x.axis != 0) x=filenames[n+1],
+                            if (width.y.axis  != 0) y=filenames[n+2]),
+              lab.names = c(if (height.xlab   != 0) x=filenames[n+3],
+                            if (width.ylab    != 0) y=filenames[n+4]),
               key.name = if (is.key) filenames[n+5],
               class=c("microplotMatrix", class(filenames.array)))
 

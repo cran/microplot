@@ -41,8 +41,9 @@ importFrom(ggplot2, element_blank, element_line, element_text, xlab, ylab,
 importFrom(htmltools, save_html, browsable, HTML)
 importFrom(cowplot, plot_grid, get_legend, plot_to_gtable)
 importFrom(flextable, add_footer, add_header, align, body_add_flextable,
-           bold, border_inner_h, border_inner_v, display, flextable, height,
-           hline, merge_at, merge_h, set_header_labels, width)
+           bold, border_inner_h, border_inner_v, compose, flextable, height,
+           hline, merge_at, merge_h, set_header_labels, width,
+           as_image, as_paragraph)
 importFrom(officer, read_docx, fp_border,
            body_add_par, body_end_section_landscape, body_end_section_portrait)
 
@@ -55,6 +56,7 @@ S3method(microplot, AEdotplot)
 S3method(latex, trellis)
 S3method(latex, ggplot)
 S3method(latex, graphicsList)
+S3method(latex, graphicsClass)
 S3method(latex, microplotMatrix)
 S3method(latex, includegraphicsMatrix)
 S3method(latex, AEdotplot)

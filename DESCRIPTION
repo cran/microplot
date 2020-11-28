@@ -1,8 +1,8 @@
 Package: microplot
 Type: Package
 Title: Microplots (Sparklines) in 'LaTeX', 'Word', 'HTML', 'Excel'
-Version: 1.0-42
-Date: 2018-08-18
+Version: 1.0-44
+Date: 2020-11-28
 Author: Richard M. Heiberger, with contributions from Karen Byron and Nooreen Dabbish.
 Maintainer: Richard M. Heiberger <rmh@temple.edu>
 Description: The microplot function writes a set of R graphics files to be used as
@@ -33,12 +33,12 @@ Description: The microplot function writes a set of R graphics files to be used 
   (with either filetype="docx" or filetype="html") work with all
   operating systems.  The package does not require the installation of
   'LaTeX' or 'MS Word' to be able to write '.tex' or '.docx' files.
-Imports: Hmisc (>= 4.1-1), HH, lattice, grid, flextable, officer,
-        ggplot2, htmltools, cowplot
+Imports: Hmisc (>= 4.1-1), HH, lattice, grid, flextable (>= 0.5-11),
+        officer, ggplot2, htmltools, cowplot
 Suggests: reshape2, latticeExtra, xtable, markdown, rmarkdown, knitr,
         htmlTable
 License: GPL (>= 2)
 NeedsCompilation: no
-Packaged: 2018-08-19 03:50:23 UTC; rmh
+Packaged: 2020-11-28 22:04:53 UTC; rmh
 Repository: CRAN
-Date/Publication: 2018-08-19 05:10:02 UTC
+Date/Publication: 2020-11-28 22:30:03 UTC

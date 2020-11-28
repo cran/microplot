@@ -26,9 +26,9 @@ functions that display Operating System files
 \method{show}{dvilC}(object, width = 5.5, height = 7,
            ConsoleToFile=TRUE)
 
-\method{print}{OSfilename}(x, ...)
+\method{print}{OSfilename}(x, wait=FALSE, ...)
 
-\method{show}{OSfilename}(x, ...)
+\method{show}{OSfilename}(x, wait=FALSE, ...)
 
 }
 %- maybe also 'usage' for other objects documented here.
@@ -37,7 +37,7 @@ functions that display Operating System files
     For \code{show.latexConsole} and \code{dvi.latexConsole}, a \code{c("latexConsole","latex")}
     object created by \code{latex.trellis}.
     For \code{show.dvilC}, a \code{c("dvilC","dvi")} object created by \code{dvi.latexConsole}.
-  }
+  }x
   \item{ConsoleToFile}{Logical.  \code{TRUE} diverts 'latex' and 'dvips'
            console output to a file (and prints the file name).
            \code{FALSE} displays the console output on the 'R' console.}
@@ -45,6 +45,12 @@ functions that display Operating System files
 
 \item{x}{The generic functions for \code{print} and \code{show} require
   \code{x} as the argument name.}
+
+\item{wait}{Logical, defaults to \code{FALSE}. Argument to
+          \code{\link{system}} command.  \code{FALSE} indicates the print
+          should run asynchronously, meaning the R interpreter is
+          immediately ready for the next command. With \code{TRUE} the R
+          interpreter would wait for the command to finish.}
 
 \item{\dots}{ignored}
 }

@@ -219,7 +219,7 @@ and then to \code{latex.microplotMatrix}.
 The print method for \code{"latex"} objects, described in
 \code{\link[Hmisc:latex]{dvi}},
 is to display the latexed file on the screen at 5.5in wide by 7in tall.
-The dimensions can be changed by an explicit call to the the \code{dvi} method with other
+The dimensions can be changed by an explicit call to the \code{dvi} method with other
 dimensions, for example\cr
 \code{dvi(latex(MyTrellisObject), height.panel=11, width.panel=8.5)}\cr
 See an example in \code{demo("latex", package="microplot", ask=TRUE)}

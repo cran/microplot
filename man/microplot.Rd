@@ -36,31 +36,31 @@ microplot(object, ...)
           collapse=layoutCollapse, ## Zero out unwanted
                                    ## layout.heights and layout.widths.
                                    ## See below for example.
-          height.x.axis=height.panel,
+          height.x.axis=height.panel[1],
           axis.line=list(col="black"),
           xaxis.line=axis.line,
           par.settings.x.axis=
             list(layout.heights=list(panel=0, axis.bottom=1,
                                      axis.xlab.padding=0, xlab=0),
                  axis.line=xaxis.line),
-          width.y.axis=width.panel,
+          width.y.axis=width.panel[1],
           yaxis.line=axis.line,
           par.settings.y.axis=
             list(layout.widths=list(ylab=0, ylab.axis.padding=0,
                                     axis.left=1, panel=0),
                  axis.line=yaxis.line),
-          height.xlab=height.panel,
+          height.xlab=height.panel[1],
           par.settings.xlab=
             list(layout.heights=list(panel=0, axis.bottom=0,
                                      axis.xlab.padding=0, xlab=1),
                  axis.line=list(col="transparent")),
-          width.ylab=width.panel,
+          width.ylab=width.panel[1],
           par.settings.ylab=
             list(layout.widths=list(ylab=1, ylab.axis.padding=0,
                                     axis.left=0, panel=0),
                  axis.line=list(col="transparent")),
           key=FALSE,    ## FALSE or a list of arguments defining a key
-          height.key=height.panel, width.key=width.panel,
+          height.key=height.panel[1], width.key=width.panel[1],
           ...)  ## needed to match generic.  ignored in the trellis method
 
 
