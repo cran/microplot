@@ -1,4 +1,16 @@
+Version: 1.0-45
+---------------
+
+* 2022 Jan 26
+
+* vignette needed updating to catch up with nd <- names(dimnames(TrellisObject))
+  outer=TRUE gives a value to nd[[1]], but not nd[[2]].
+
+* updated two https references
+
+
 Version: 1.0-44
+---------------
 
 * 2020 Nov 28
 

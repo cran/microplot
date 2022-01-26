@@ -1,7 +1,7 @@
 ### R code from vignette source 'rmhPoster.Rtex'
 
 ###################################################
-### code chunk number 1: rmhPoster.Rtex:15-148
+### code chunk number 1: rmhPoster.Rtex:15-149
 ###################################################
 library(lattice)
 library(latticeExtra)
@@ -25,6 +25,7 @@ irisBW <-
          scales=list(alternating=FALSE),
          xlab=NULL,
          par.strip.text=list(cex=1.5))
+names(dimnames(irisBW))[[2]] <- "Measurement"
 
 ## pdf of boxplot matrix
 pdf("irisBW.pdf", width=7, height=7)  ## inch

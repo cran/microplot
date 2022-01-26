@@ -187,7 +187,7 @@ them on second and later runs.
 }
   \item{rmh.borders}{
 My preferences for borders on cells based on the American Statistical
-Association (\url{http://amstat.tfjournals.com/asa-style-guide/})
+Association (\url{https://academic.oup.com/DocumentLibrary/JSSMET/ASASTYLE_GUIDE.pdf})
 style sheet.  The \pkg{flextable} default, with full
 borders between rows, does not conform.
 }
