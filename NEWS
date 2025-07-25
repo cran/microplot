@@ -1,3 +1,22 @@
+Version: 1.0-46
+---------------
+
+* 2025 Jul 22
+
+* DESCRIPTION
+  added new Authors$R filed and revise Author field to match.
+
+* latex.AEdotplot.Rd and msWord.Rd
+  replaced \link{flextable} with \link[flextable]{flextable}
+  
+* cc176.y.adj.Rd
+  change URL to use revised value from Springer
+
+* NAMESPACE
+  S3method(msWord, graphicsClass)
+
+
+
 Version: 1.0-45
 ---------------
 

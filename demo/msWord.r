@@ -1,10 +1,11 @@
+library(microplot)
 ## MS Word display of 1D and 2D graphs
 
 dd <- data.frame(rr=rep(letters[1:4], each=3*10),
                  cc=rep(LETTERS[5:7], each=10, times=4),
                  x=rnorm(120, s=20+rep(1:12, each=10)),
                  y=rnorm(120, m=100, s=20+rep(1:12, each=10)),
-                 g=rep(c("1","2","3","4","5","6","7","8","9","A","B","C"), each=10),
+                 g=rep(factor(c("1","2","3","4","5","6","7","8","9","A","B","C")), each=10),
                  rra=rep(letters[8:9], each=5))
 
 tt <- lattice::xyplot(y ~ x | cc * rr, data=dd,

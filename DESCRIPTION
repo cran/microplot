@@ -1,9 +1,23 @@
 Package: microplot
 Type: Package
 Title: Microplots (Sparklines) in 'LaTeX', 'Word', 'HTML', 'Excel'
-Version: 1.0-45
-Date: 2022-01-26
-Author: Richard M. Heiberger, with contributions from Karen Byron and Nooreen Dabbish.
+Version: 1.0-47
+Date: 2025-8-21
+Authors@R: c(person(given = c("Richard", "M."),
+                    family = "Heiberger",
+                    role = c("aut", "cre"),
+                    email = "rmh@temple.edu",
+                    comment = c(ORCID = "0000-0001-9047-6931")),
+             person(given = c("Karen"),
+                    family = "Byron",
+                    role = "ctb"),
+             person(given = "Nooreen",
+                    family = "Dabbish",
+                    role = "ctb"))
+Author: Richard M. Heiberger [aut, cre] (ORCID:
+    <https://orcid.org/0000-0001-9047-6931>),
+  Karen Byron [ctb],
+  Nooreen Dabbish [ctb]
 Maintainer: Richard M. Heiberger <rmh@temple.edu>
 Description: The microplot function writes a set of R graphics files to be used as
   microplots (sparklines) in tables in either 'LaTeX', 'HTML', 'Word',
@@ -39,6 +53,6 @@ Suggests: reshape2, latticeExtra, xtable, markdown, rmarkdown, knitr,
         htmlTable
 License: GPL (>= 2)
 NeedsCompilation: no
-Packaged: 2022-01-26 21:51:27 UTC; rmh
+Packaged: 2025-07-22 23:19:11 UTC; rmh
 Repository: CRAN
-Date/Publication: 2022-01-26 22:10:02 UTC
+Date/Publication: 2025-07-25 03:10:08 UTC

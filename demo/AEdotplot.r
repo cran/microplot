@@ -1,3 +1,4 @@
+library(microplot)
 ## Hmisc options for pdflatex
 ## graphics files are .pdf
 latexSetOptions()
@@ -43,11 +44,11 @@ dvi(
   latex(AE2c,
         rowlabel="Most Frequent On-Therapy Adverse Events",
         rgroup=c(rev(names(attr(AE2, "n.events"))),"\\vspace*{-2ex}"),
-        n.rgroup=c(rev(attr(AE2, "n.events")),2)),
+        n.rgroup=c(rev(attr(AE2, "n.events")),1)),
   height=10.4, width=9.5)
 
 
-
+if(FALSE){
 #####  msWord #####
 
 AE1c.docx <- msWord(AE1c,
@@ -61,3 +62,4 @@ AE2c.docx <- msWord(AE2c,
                     rgroup.exclude.borders=c(34, 35))
 AE2c.docx
 
+}

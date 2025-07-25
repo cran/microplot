@@ -1,3 +1,4 @@
+library(microplot)
 ## Hmisc options for pdflatex
 ## graphics files are .pdf
 

@@ -1,3 +1,4 @@
+library(microplot)
 ## xtable example
 
 ## These are the settings for my machines

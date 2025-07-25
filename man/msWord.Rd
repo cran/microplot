@@ -248,7 +248,7 @@ The \code{msWord} function uses facilities provided by the
   a following run to modify these values.
 
 
-  For \code{filetype="html"}, the value is a \code{\link{flextable}} object.
+  For \code{filetype="html"}, the value is a \code{\link[flextable]{flextable}} object.
   Printing the returned value will display the generated table in a
   browser window.
    If you wish to keep the html object, you MUST save it manually!

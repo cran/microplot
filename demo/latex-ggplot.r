@@ -1,3 +1,4 @@
+library(microplot)
 ## tests R/microplot.ggplot
 
 ## These are the settings for my machines

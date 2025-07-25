@@ -1,3 +1,4 @@
+library(microplot)
 ## These are the settings for my machines
 ## Set options for Hmisc::latex
 latexSetOptions()

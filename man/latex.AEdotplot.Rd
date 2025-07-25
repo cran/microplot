@@ -76,7 +76,7 @@ the 'LaTeX' tabular environment constructed by the \code{\link[Hmisc]{latex}} fu
 For \code{msWord.AEdotplot}, the  \code{"msWordFilename"} object giving the
 pathname of the \code{.docx} file containing
 the generated table constructed by the \code{\link{msWord.microplotMatrix}}
-function which in turn uses functions in the \pkg{\link{flextable}}
+function which in turn uses functions in the \pkg{\link[flextable]{flextable}}
 package.
 
 The \code{microplot.AEdotplot} method returns a list containing the
